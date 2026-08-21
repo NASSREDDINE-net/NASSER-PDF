@@ -3,7 +3,7 @@ import FileDrop from './FileDrop.jsx'
 import { convertOfficeToPdf, ApiError } from '../lib/api.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
-const MAX_FILE_MB = 15
+const MAX_FILE_MB = 100
 
 export default function OfficeToPdf({ title, lead, accept, extensions, hint }) {
   const [file, setFile] = useState(null)

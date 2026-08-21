@@ -3,8 +3,8 @@ import FileDrop from '../components/FileDrop.jsx'
 import { mergePdfs } from '../lib/pdfEdit.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
-const MAX_FILE_MB = 30
-const MAX_FILES = 20
+const MAX_FILE_MB = 75
+const MAX_FILES = 50
 
 export default function MergePdf() {
   const [files, setFiles] = useState([]) // { id, file }

@@ -7,7 +7,7 @@ export default function WordToPdf() {
       lead="ارفع ملف DOC أو DOCX وسيتم تحويله إلى PDF بتنسيق مطابق للأصل."
       accept=".doc,.docx"
       extensions={['doc', 'docx']}
-      hint="DOC أو DOCX — حتى 15MB"
+      hint="DOC أو DOCX — حتى 100MB"
     />
   )
 }

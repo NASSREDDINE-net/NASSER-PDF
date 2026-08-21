@@ -6,35 +6,81 @@ export class ApiError extends Error {
 }
 
 export async function convertOfficeToPdf(file) {
-  const formData = new FormData()
-  formData.append('file', file)
+  const { jobId, uploadUrl, uploadParameters } = await createConvertJob(file.name)
+  await uploadToCloudConvert(uploadUrl, uploadParameters, file)
+  const downloadUrl = await pollForResult(jobId)
+  return downloadConvertedFile(downloadUrl)
+}
 
+async function createConvertJob(filename) {
   let response
   try {
-    response = await fetch('/api/convert', {
+    response = await fetch('/api/convert-job', {
       method: 'POST',
-      body: formData
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filename })
     })
   } catch {
     throw new ApiError('تعذّر الاتصال بخادم التحويل. تحقق من اتصالك بالإنترنت وحاول مجدداً.', 0)
   }
 
   if (!response.ok) {
-    if (response.status === 413) {
-      throw new ApiError('حجم الملف أكبر من الحد المسموح به.', 413)
-    }
-    if (response.status === 429) {
-      throw new ApiError('عدد كبير من الطلبات، الرجاء المحاولة بعد قليل.', 429)
-    }
-    let message = 'تعذّر تحويل الملف. تأكد أنه ملف صالح وحاول مجدداً.'
-    try {
-      const data = await response.json()
-      if (data?.error) message = data.error
-    } catch {
-      /* ignore parse errors */
-    }
-    throw new ApiError(message, response.status)
+    throw new ApiError(await safeErrorMessage(response, 'تعذّر بدء عملية التحويل.'), response.status)
   }
 
+  return response.json()
+}
+
+async function uploadToCloudConvert(uploadUrl, uploadParameters, file) {
+  const form = new FormData()
+  Object.entries(uploadParameters).forEach(([key, value]) => form.append(key, value))
+  form.append('file', file)
+
+  let response
+  try {
+    response = await fetch(uploadUrl, { method: 'POST', body: form })
+  } catch {
+    throw new ApiError('تعذّر رفع الملف. تحقق من اتصالك بالإنترنت وحاول مجدداً.', 0)
+  }
+
+  if (!response.ok) {
+    throw new ApiError('تعذّر رفع الملف إلى خدمة التحويل.', response.status)
+  }
+}
+
+async function pollForResult(jobId, timeoutMs = 90000, intervalMs = 1500) {
+  const start = Date.now()
+  while (Date.now() - start < timeoutMs) {
+    const response = await fetch(`/api/convert-status?jobId=${encodeURIComponent(jobId)}`)
+    if (!response.ok) {
+      throw new ApiError(await safeErrorMessage(response, 'تعذّر التحقق من حالة التحويل.'), response.status)
+    }
+    const data = await response.json()
+    if (data.status === 'finished') return data.downloadUrl
+    if (data.status === 'error') throw new ApiError(data.message || 'فشل التحويل.', 422)
+    await new Promise((resolve) => setTimeout(resolve, intervalMs))
+  }
+  throw new ApiError('استغرق التحويل وقتاً أطول من المتوقع. حاول مجدداً.', 504)
+}
+
+async function downloadConvertedFile(downloadUrl) {
+  let response
+  try {
+    response = await fetch(downloadUrl)
+  } catch {
+    throw new ApiError('تعذّر تنزيل الملف المحوَّل.', 0)
+  }
+  if (!response.ok) {
+    throw new ApiError('تعذّر تنزيل الملف المحوَّل.', response.status)
+  }
   return response.blob()
+}
+
+async function safeErrorMessage(response, fallback) {
+  try {
+    const data = await response.json()
+    return data?.error || fallback
+  } catch {
+    return fallback
+  }
 }

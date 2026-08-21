@@ -1,8 +1,11 @@
 {
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "functions": {
-    "api/convert.js": {
-      "maxDuration": 60
+    "api/convert-job.js": {
+      "maxDuration": 20
+    },
+    "api/convert-status.js": {
+      "maxDuration": 15
     }
   }
 }

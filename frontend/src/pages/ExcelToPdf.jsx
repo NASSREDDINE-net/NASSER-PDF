@@ -7,7 +7,7 @@ export default function ExcelToPdf() {
       lead="ارفع ملف XLS أو XLSX وسيتم تحويله إلى PDF."
       accept=".xls,.xlsx"
       extensions={['xls', 'xlsx']}
-      hint="XLS أو XLSX — حتى 15MB"
+      hint="XLS أو XLSX — حتى 100MB"
     />
   )
 }

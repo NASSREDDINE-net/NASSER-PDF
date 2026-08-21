@@ -4,7 +4,7 @@ import { getPdfPageCount, parsePageRanges, splitPdfByRanges, splitPdfToSinglePag
 import { downloadBlob } from '../lib/imagePdf.js'
 import { downloadFilesAsZip } from '../lib/zip.js'
 
-const MAX_FILE_MB = 30
+const MAX_FILE_MB = 75
 
 export default function SplitPdf() {
   const [file, setFile] = useState(null)

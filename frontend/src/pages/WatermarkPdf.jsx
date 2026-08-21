@@ -3,7 +3,7 @@ import FileDrop from '../components/FileDrop.jsx'
 import { watermarkPdf } from '../lib/pdfEdit.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
-const MAX_FILE_MB = 30
+const MAX_FILE_MB = 75
 
 export default function WatermarkPdf() {
   const [file, setFile] = useState(null)

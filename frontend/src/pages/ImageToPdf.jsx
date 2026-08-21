@@ -2,8 +2,8 @@ import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
 import { imagesToPdf, downloadBlob } from '../lib/imagePdf.js'
 
-const MAX_FILE_MB = 20
-const MAX_FILES = 30
+const MAX_FILE_MB = 50
+const MAX_FILES = 100
 const ACCEPTED = ['image/png', 'image/jpeg']
 
 export default function ImageToPdf() {
