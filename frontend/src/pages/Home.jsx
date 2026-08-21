@@ -24,6 +24,12 @@ const TOOLS = [
     icon: 'QR',
     title: 'QR Code',
     description: 'أنشئ رمز QR لرابط أو نص أو بريد أو رقم هاتف أو شبكة واي فاي.'
+  },
+  {
+    to: '/pdf-editor',
+    icon: '📝',
+    title: 'PDF Editor',
+    description: 'دمج، تقسيم، ترتيب صفحات، وإضافة علامة مائية على ملفات PDF.'
   }
 ]
 

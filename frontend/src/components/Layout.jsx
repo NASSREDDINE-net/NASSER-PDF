@@ -4,7 +4,8 @@ const NAV_LINKS = [
   { to: '/word-to-pdf', label: 'Word → PDF' },
   { to: '/excel-to-pdf', label: 'Excel → PDF' },
   { to: '/image-to-pdf', label: 'صور → PDF' },
-  { to: '/qr-code', label: 'QR Code' }
+  { to: '/qr-code', label: 'QR Code' },
+  { to: '/pdf-editor', label: 'PDF Editor' }
 ]
 
 export default function Layout({ children }) {
