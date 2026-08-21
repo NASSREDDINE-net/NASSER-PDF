@@ -41,6 +41,9 @@ export default function Layout({ children }) {
             <Link to="/about">حول الموقع</Link>
             <Link to="/privacy">الخصوصية</Link>
             <Link to="/terms">الشروط</Link>
+            <a href="https://nassreddine.is-a.dev/" target="_blank" rel="noopener noreferrer">
+              Developed by NASSREDDINE
+            </a>
           </div>
         </div>
       </footer>
