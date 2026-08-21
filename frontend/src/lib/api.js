@@ -1,5 +1,3 @@
-const API_BASE = import.meta.env.VITE_API_URL || ''
-
 export class ApiError extends Error {
   constructor(message, status) {
     super(message)
@@ -13,7 +11,7 @@ export async function convertOfficeToPdf(file) {
 
   let response
   try {
-    response = await fetch(`${API_BASE}/api/convert`, {
+    response = await fetch('/api/convert', {
       method: 'POST',
       body: formData
     })

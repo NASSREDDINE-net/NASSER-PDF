@@ -6,26 +6,24 @@
 
 | الأداة | أين تعمل |
 | --- | --- |
-| Word (DOC/DOCX) → PDF | خادم Backend (LibreOffice) |
-| Excel (XLS/XLSX) → PDF | خادم Backend (LibreOffice) |
+| Word (DOC/DOCX) → PDF | Vercel Serverless Function تستدعي CloudConvert |
+| Excel (XLS/XLSX) → PDF | Vercel Serverless Function تستدعي CloudConvert |
 | صور (PNG/JPG) → PDF | داخل المتصفح بالكامل (pdf-lib) |
 | QR Code | داخل المتصفح بالكامل (qrcode) |
 
 ## البنية
 
 ```
-frontend/   React + Vite — يُنشر على Vercel
-backend/    Express + LibreOffice (Docker) — يُنشر على Render
-render.yaml Render Blueprint لنشر الـ backend تلقائياً
+frontend/           React + Vite — يُنشر على Vercel
+frontend/api/convert.js   Serverless Function تستدعي CloudConvert API لتحويل Word/Excel إلى PDF
 ```
 
-تحويل Word وExcel يحتاج محرك LibreOffice حقيقي لإنتاج PDF مطابق للتنسيق الأصلي،
-وهو ما لا يمكن تشغيله على Vercel Serverless — لذلك يُشغَّل في حاوية Docker منفصلة على Render.
+مشروع واحد فقط على Vercel — لا حاجة لأي خادم منفصل. تحويل Word وExcel يتم عبر خدمة
+[CloudConvert](https://cloudconvert.com) الخارجية (تحويل حقيقي مطابق للتنسيق الأصلي)، ويُستدعى
+من دالة Serverless تعمل داخل نفس مشروع Vercel وتُخفي مفتاح الـ API عن المتصفح.
 أدوات الصور وQR Code لا تحتاج أي خادم إطلاقاً وتعمل مجاناً بدون أي حدود استخدام.
 
 ## التشغيل محلياً
-
-### Frontend
 
 ```bash
 cd frontend
@@ -33,49 +31,41 @@ npm install
 npm run dev
 ```
 
-### Backend (يحتاج LibreOffice مثبت محلياً أو Docker)
+أدوات الصور وQR Code تعمل مباشرة مع `npm run dev`. لاختبار Word/Excel → PDF محلياً تحتاج
+[Vercel CLI](https://vercel.com/docs/cli) لتشغيل الـ Serverless Function:
 
 ```bash
-cd backend
-docker build -t nasser-pdf-backend .
-docker run -p 3000:3000 -e ALLOWED_ORIGINS=http://localhost:5173 nasser-pdf-backend
+npm i -g vercel
+cd frontend
+vercel dev
 ```
 
-ثم أنشئ ملف `frontend/.env.local` وضع فيه:
+ثم أنشئ ملف `frontend/.env.local` وضع فيه مفتاح CloudConvert (انظر `.env.example`):
 
 ```
-VITE_API_URL=http://localhost:3000
+CLOUDCONVERT_API_KEY=your_cloudconvert_api_key_here
 ```
 
-## النشر
+## النشر على Vercel
 
-### 1) Backend على Render
+1. **New Project** → اختر الريبو → **Root Directory: `frontend`**.
+2. Framework Preset: `Vite` (يُكتشف تلقائياً).
+3. أضف متغير البيئة (Settings → Environment Variables):
+   - Key: `CLOUDCONVERT_API_KEY`
+   - Value: مفتاحك من [cloudconvert.com/dashboard/api/v2/keys](https://cloudconvert.com/dashboard/api/v2/keys)
+   - **بدون** بادئة `VITE_` — هذا مهم حتى لا يظهر المفتاح في كود المتصفح.
+4. Deploy.
 
-- من لوحة Render: **New → Blueprint**، واختر هذا الريبو (يقرأ `render.yaml` تلقائياً).
-- أو يدوياً: **New → Web Service** → اختر الريبو → Runtime: `Docker` → Root Directory: `backend`.
-- الخطة: `Free`.
-- بعد أول نشر، عدّل متغير البيئة `ALLOWED_ORIGINS` ليطابق رابط موقعك على Vercel.
-- ملاحظة: الخطة المجانية على Render "تنام" بعد فترة من عدم الاستخدام، فأول طلب تحويل بعد فترة خمول
-  قد يستغرق 30-50 ثانية إضافية لتشغيل الحاوية من جديد. هذا طبيعي ولا يحتاج أي إجراء.
+## حدود CloudConvert المجانية
 
-### 2) Frontend على Vercel
-
-- **New Project** → اختر الريبو → Root Directory: `frontend`.
-- Framework Preset: `Vite` (يُكتشف تلقائياً).
-- أضف متغير البيئة `VITE_API_URL` بقيمة رابط خدمة Render (مثال: `https://nasser-pdf-backend.onrender.com`).
-- Deploy.
-
-### 3) بعد النشر
-
-- تأكد أن `ALLOWED_ORIGINS` في Render يطابق دومين Vercel الفعلي (بدون شرطة `/` في النهاية).
-- اربط دومين مخصص من إعدادات Vercel إن رغبت.
+الخطة المجانية من CloudConvert توفر عدد محدود من دقائق التحويل يومياً — كافية للاستخدام
+الشخصي، لكن لو تجاوزت الحد ستحصل على رسالة خطأ من `/api/convert` حتى يتجدد الحد أو تُرقّي الخطة.
 
 ## الأمان والحماية
 
-- Rate limiting على `/api/convert` (30 طلب لكل 15 دقيقة لكل IP).
-- التحقق من امتداد الملف وحجمه (حتى 15MB) قبل المعالجة.
-- CORS مقيّد بدومين الواجهة الأمامية فقط.
-- كل ملف يُحوَّل في مجلد مؤقت معزول يُحذف فوراً بعد الاستجابة (نجاحاً أو فشلاً).
+- التحقق من امتداد الملف وحجمه (حتى 15MB) قبل الإرسال لـ CloudConvert.
+- مفتاح `CLOUDCONVERT_API_KEY` يبقى على الخادم فقط (لا بادئة `VITE_`)، لا يصل أبداً لمتصفح المستخدم.
+- مهلة تنفيذ الدالة محددة بـ 60 ثانية (`vercel.json`) لمنع الطلبات المعلّقة.
 
 ## يحتاج إضافة يدوياً
 
