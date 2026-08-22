@@ -21,7 +21,7 @@ export default function ExcelToPdf() {
   return (
     <OfficeToPdf
       title="تحويل Excel إلى PDF"
-      lead="ارفع ملف XLS أو XLSX وسيتم تحويله إلى PDF. نضبط إعدادات الصفحة تلقائياً (احتواء أفقي، اتجاه Landscape) لملفات XLSX حتى لا تتقسم الأعمدة على صفحات كثيرة."
+      lead="ارفع ملف XLS أو XLSX وسيتم تحويله إلى PDF. نضبط إعدادات الصفحة تلقائياً (احتواء كامل بصفحة واحدة، اتجاه Landscape) لملفات XLSX حتى لا تتقسم الورقة على صفحات كثيرة."
       accept=".xls,.xlsx"
       extensions={['xls', 'xlsx']}
       hint="XLS أو XLSX — حتى 100MB"
