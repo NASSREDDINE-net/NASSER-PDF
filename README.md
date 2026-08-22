@@ -6,10 +6,11 @@
 
 | الأداة | أين تعمل |
 | --- | --- |
-| Word (DOC/DOCX) → PDF | Vercel Serverless Functions تستدعي CloudConvert |
-| Excel (XLS/XLSX) → PDF | Vercel Serverless Functions تستدعي CloudConvert |
-| صور (PNG/JPG) → PDF | داخل المتصفح بالكامل (pdf-lib) |
-| PDF Editor (دمج / تقسيم / ترتيب صفحات / علامة مائية) | داخل المتصفح بالكامل (pdf-lib + jszip) |
+| Word (DOC/DOCX) → PDF، PDF → Word/Excel | Vercel Serverless Functions تستدعي CloudConvert |
+| ضغط PDF | Vercel Serverless Functions تستدعي CloudConvert (عملية `optimize`) |
+| صور (PNG/JPG) → PDF، PDF → صور | داخل المتصفح بالكامل (pdf-lib / pdfjs-dist) |
+| PDF Editor (دمج / تقسيم / ترتيب صفحات / علامة مائية / تحرير مرئي) | داخل المتصفح بالكامل (pdf-lib + jszip + pdfjs-dist) |
+| استخراج نص، تعبئة نماذج PDF | داخل المتصفح بالكامل (pdfjs-dist / pdf-lib forms) |
 | QR Code | داخل المتصفح بالكامل (qrcode) |
 
 ## البنية
@@ -73,6 +74,13 @@ CLOUDCONVERT_API_KEY=your_cloudconvert_api_key_here
   الخيارات هي: (أ) قبوله كما هو (كافٍ للاستخدام الشخصي)، (ب) ترقية خطة CloudConvert (مدفوعة)،
   أو (ج) العودة لتشغيل LibreOffice ذاتياً على خادم كـ Render (بدون أي سقف يومي، لكن يحتاج
   إدارة خادم منفصل بدل الاعتماد على API خارجي).
+
+## ملاحظة حول ضغط PDF
+
+أداة الضغط تستخدم عملية `optimize` من CloudConvert مع أحد ملفات إعداد Ghostscript المعروفة
+(`web`/`print`/`archive`). هذا الجزء لم يُختبر مقابل حساب CloudConvert فعلي وقت الكتابة —
+إذا رجعت رسالة خطأ عند الضغط، الأرجح أن اسم الـ `profile` يحتاج تعديل بسيط في
+`frontend/api/convert-job.js` (نص الخطأ من CloudConvert نفسه سيوضح القيم المقبولة).
 
 ## الأمان والحماية
 

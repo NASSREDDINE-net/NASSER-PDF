@@ -5,7 +5,17 @@ import { downloadBlob } from '../lib/imagePdf.js'
 
 const MAX_FILE_MB = 100
 
-export default function OfficeToPdf({ title, lead, accept, extensions, hint }) {
+export default function OfficeToPdf({
+  title,
+  lead,
+  accept,
+  extensions,
+  hint,
+  convertFn = convertOfficeToPdf,
+  outputExtension = 'pdf',
+  buttonLabel = 'تحويل إلى PDF وتنزيل',
+  loadingLabel = 'جارٍ التحويل...'
+}) {
   const [file, setFile] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -33,8 +43,8 @@ export default function OfficeToPdf({ title, lead, accept, extensions, hint }) {
     setError('')
     setDone(false)
     try {
-      const blob = await convertOfficeToPdf(file)
-      const outName = file.name.replace(/\.[^.]+$/, '') + '.pdf'
+      const blob = await convertFn(file)
+      const outName = file.name.replace(/\.[^.]+$/, '') + '.' + outputExtension
       downloadBlob(blob, outName)
       setDone(true)
     } catch (err) {
@@ -50,7 +60,7 @@ export default function OfficeToPdf({ title, lead, accept, extensions, hint }) {
       <p className="lead">{lead}</p>
 
       {error && <div className="alert alert-error">{error}</div>}
-      {done && <div className="alert alert-success">تم التحويل بنجاح، بدأ تنزيل الملف.</div>}
+      {done && <div className="alert alert-success">تمت العملية بنجاح، بدأ تنزيل الملف.</div>}
 
       <div className="card">
         <FileDrop accept={accept} onFiles={handleFiles} hint={hint} />
@@ -67,7 +77,7 @@ export default function OfficeToPdf({ title, lead, accept, extensions, hint }) {
 
       <button className="btn" disabled={!file || loading} onClick={handleConvert}>
         {loading && <span className="spinner" />}
-        {loading ? 'جارٍ التحويل...' : 'تحويل إلى PDF وتنزيل'}
+        {loading ? loadingLabel : buttonLabel}
       </button>
     </div>
   )

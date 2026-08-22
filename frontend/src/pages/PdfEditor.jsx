@@ -30,6 +30,30 @@ const TOOLS = [
     icon: '✏️',
     title: 'تحرير PDF',
     description: 'أضف نص، صور، أشكال، رسم حر، تظليل، إخفاء، أو توقيع مباشرة فوق الصفحات.'
+  },
+  {
+    to: '/pdf-to-image',
+    icon: '🖼️',
+    title: 'PDF → صورة',
+    description: 'حوّل صفحات PDF إلى صور PNG أو JPG بجودة تختارها.'
+  },
+  {
+    to: '/extract-text',
+    icon: '📄',
+    title: 'استخراج نص',
+    description: 'استخرج كل النص من ملف PDF وانسخه أو نزّله.'
+  },
+  {
+    to: '/fill-pdf-form',
+    icon: '🖊️',
+    title: 'تعبئة نماذج',
+    description: 'عبّئ الحقول القابلة للتعبئة في ملف PDF ونزّل النسخة المكتملة.'
+  },
+  {
+    to: '/compress-pdf',
+    icon: '🗜️',
+    title: 'ضغط PDF',
+    description: 'قلّل حجم ملف PDF مع الحفاظ على جودة معقولة.'
   }
 ]
 
@@ -38,7 +62,7 @@ export default function PdfEditor() {
     <div>
       <div className="hero">
         <h1>PDF Editor</h1>
-        <p>أدوات تحرير PDF تعمل بالكامل داخل متصفحك — بدون رفع ملفاتك لأي خادم.</p>
+        <p>أدوات تحرير PDF شاملة — أغلبها يعمل بالكامل داخل متصفحك، وبعضها (زي الضغط) يمر عبر خدمة تحويل خارجية.</p>
       </div>
       <div className="tool-grid">
         {TOOLS.map((tool) => (

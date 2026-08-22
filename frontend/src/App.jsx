@@ -12,6 +12,12 @@ import SplitPdf from './pages/SplitPdf.jsx'
 import OrganizePdf from './pages/OrganizePdf.jsx'
 import WatermarkPdf from './pages/WatermarkPdf.jsx'
 import EditPdf from './pages/EditPdf.jsx'
+import PdfToImage from './pages/PdfToImage.jsx'
+import ExtractText from './pages/ExtractText.jsx'
+import FillPdfForm from './pages/FillPdfForm.jsx'
+import PdfToWord from './pages/PdfToWord.jsx'
+import PdfToExcel from './pages/PdfToExcel.jsx'
+import CompressPdf from './pages/CompressPdf.jsx'
 import Privacy from './pages/Privacy.jsx'
 import Terms from './pages/Terms.jsx'
 import About from './pages/About.jsx'
@@ -33,6 +39,12 @@ export default function App() {
           <Route path="/organize-pdf" element={<OrganizePdf />} />
           <Route path="/watermark-pdf" element={<WatermarkPdf />} />
           <Route path="/edit-pdf" element={<EditPdf />} />
+          <Route path="/pdf-to-image" element={<PdfToImage />} />
+          <Route path="/extract-text" element={<ExtractText />} />
+          <Route path="/fill-pdf-form" element={<FillPdfForm />} />
+          <Route path="/pdf-to-word" element={<PdfToWord />} />
+          <Route path="/pdf-to-excel" element={<PdfToExcel />} />
+          <Route path="/compress-pdf" element={<CompressPdf />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/about" element={<About />} />

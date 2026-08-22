@@ -14,6 +14,18 @@ const TOOLS = [
     description: 'حوّل ملفات XLS وXLSX إلى PDF بسهولة.'
   },
   {
+    to: '/pdf-to-word',
+    icon: 'W',
+    title: 'PDF → Word',
+    description: 'حوّل ملف PDF إلى مستند Word قابل للتعديل.'
+  },
+  {
+    to: '/pdf-to-excel',
+    icon: 'X',
+    title: 'PDF → Excel',
+    description: 'حوّل ملف PDF إلى جدول بيانات Excel.'
+  },
+  {
     to: '/image-to-pdf',
     icon: 'IMG',
     title: 'صور → PDF',

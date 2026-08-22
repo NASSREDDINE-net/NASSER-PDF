@@ -6,19 +6,31 @@ export class ApiError extends Error {
 }
 
 export async function convertOfficeToPdf(file) {
-  const { jobId, uploadUrl, uploadParameters } = await createConvertJob(file.name)
+  return convertViaCloudConvert(file, { target: 'pdf' })
+}
+
+export async function convertPdfTo(file, target) {
+  return convertViaCloudConvert(file, { target })
+}
+
+export async function compressPdf(file, profile = 'web') {
+  return convertViaCloudConvert(file, { mode: 'compress', profile })
+}
+
+async function convertViaCloudConvert(file, jobOptions) {
+  const { jobId, uploadUrl, uploadParameters } = await createConvertJob(file.name, jobOptions)
   await uploadToCloudConvert(uploadUrl, uploadParameters, file)
   const downloadUrl = await pollForResult(jobId)
   return downloadConvertedFile(downloadUrl)
 }
 
-async function createConvertJob(filename) {
+async function createConvertJob(filename, jobOptions) {
   let response
   try {
     response = await fetch('/api/convert-job', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ filename })
+      body: JSON.stringify({ filename, ...jobOptions })
     })
   } catch {
     throw new ApiError('تعذّر الاتصال بخادم التحويل. تحقق من اتصالك بالإنترنت وحاول مجدداً.', 0)
