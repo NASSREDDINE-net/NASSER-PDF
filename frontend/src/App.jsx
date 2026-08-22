@@ -11,6 +11,7 @@ import MergePdf from './pages/MergePdf.jsx'
 import SplitPdf from './pages/SplitPdf.jsx'
 import OrganizePdf from './pages/OrganizePdf.jsx'
 import WatermarkPdf from './pages/WatermarkPdf.jsx'
+import EditPdf from './pages/EditPdf.jsx'
 import Privacy from './pages/Privacy.jsx'
 import Terms from './pages/Terms.jsx'
 import About from './pages/About.jsx'
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/split-pdf" element={<SplitPdf />} />
           <Route path="/organize-pdf" element={<OrganizePdf />} />
           <Route path="/watermark-pdf" element={<WatermarkPdf />} />
+          <Route path="/edit-pdf" element={<EditPdf />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/about" element={<About />} />
