@@ -1,0 +1,12 @@
+services:
+  backend:
+    build: .
+    environment:
+      - ALLOWED_ORIGINS=https://nasser-pdf.vercel.app
+    expose:
+      - "3000"
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --url http://backend:3000
+    depends_on:
+      - backend
