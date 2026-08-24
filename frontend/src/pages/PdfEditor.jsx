@@ -54,6 +54,18 @@ const TOOLS = [
     icon: '🗜️',
     title: 'ضغط PDF',
     description: 'قلّل حجم ملف PDF مع الحفاظ على جودة معقولة.'
+  },
+  {
+    to: '/compare-pdf',
+    icon: '🔍',
+    title: 'مقارنة PDF',
+    description: 'قارن بين ملفي PDF وشوف الفروقات كلمة بكلمة.'
+  },
+  {
+    to: '/ocr',
+    icon: '🔤',
+    title: 'استخراج نص من صورة (OCR)',
+    description: 'حوّل نص داخل صورة أو PDF ممسوح ضوئياً إلى نص قابل للنسخ.'
   }
 ]
 
