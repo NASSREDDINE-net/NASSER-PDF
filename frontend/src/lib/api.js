@@ -1,3 +1,5 @@
+import { getSessionToken } from './auth.js'
+
 const RENDER_API_URL = import.meta.env.VITE_RENDER_API_URL || ''
 
 export class ApiError extends Error {
@@ -67,9 +69,13 @@ async function convertViaCloudConvert(file, jobOptions) {
 async function createConvertJob(filename, jobOptions) {
   let response
   try {
+    const token = getSessionToken()
     response = await fetch('/api/convert-job', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
       body: JSON.stringify({ filename, ...jobOptions })
     })
   } catch {

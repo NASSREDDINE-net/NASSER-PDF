@@ -1,7 +1,12 @@
+import { isValidSessionToken } from './_session.js'
+
 export const config = { maxDuration: 20 }
 
 const CLOUDCONVERT_API_KEY = process.env.CLOUDCONVERT_API_KEY
 const CLOUDCONVERT_BASE = 'https://api.cloudconvert.com/v2'
+// Gate is active only once SESSION_SECRET is configured - keeps the site
+// working ungated until Google sign-in is actually set up.
+const AUTH_REQUIRED = Boolean(process.env.SESSION_SECRET)
 
 // target format -> allowed source extensions
 const CONVERT_RULES = {
@@ -21,6 +26,15 @@ export default async function handler(req, res) {
   if (!CLOUDCONVERT_API_KEY) {
     res.status(500).json({ error: 'الخادم غير مهيأ بعد (مفتاح CloudConvert غير موجود).' })
     return
+  }
+
+  if (AUTH_REQUIRED) {
+    const authHeader = req.headers.authorization || ''
+    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : ''
+    if (!isValidSessionToken(token)) {
+      res.status(401).json({ error: 'يلزم تسجيل الدخول لاستخدام هذه الأداة.' })
+      return
+    }
   }
 
   const filename = typeof req.body?.filename === 'string' ? req.body.filename : 'file'

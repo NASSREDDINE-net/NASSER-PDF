@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import FileDrop from './FileDrop.jsx'
+import GoogleSignInGate from './GoogleSignInGate.jsx'
 import { convertOfficeToPdf, ApiError } from '../lib/api.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
@@ -62,23 +63,25 @@ export default function OfficeToPdf({
       {error && <div className="alert alert-error">{error}</div>}
       {done && <div className="alert alert-success">تمت العملية بنجاح، بدأ تنزيل الملف.</div>}
 
-      <div className="card">
-        <FileDrop accept={accept} onFiles={handleFiles} hint={hint} />
+      <GoogleSignInGate>
+        <div className="card">
+          <FileDrop accept={accept} onFiles={handleFiles} hint={hint} />
 
-        {file && (
-          <div className="file-list">
-            <div className="file-row">
-              <span>{file.name}</span>
-              <button type="button" onClick={() => setFile(null)}>✕</button>
+          {file && (
+            <div className="file-list">
+              <div className="file-row">
+                <span>{file.name}</span>
+                <button type="button" onClick={() => setFile(null)}>✕</button>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
 
-      <button className="btn" disabled={!file || loading} onClick={handleConvert}>
-        {loading && <span className="spinner" />}
-        {loading ? loadingLabel : buttonLabel}
-      </button>
+        <button className="btn" disabled={!file || loading} onClick={handleConvert}>
+          {loading && <span className="spinner" />}
+          {loading ? loadingLabel : buttonLabel}
+        </button>
+      </GoogleSignInGate>
     </div>
   )
 }

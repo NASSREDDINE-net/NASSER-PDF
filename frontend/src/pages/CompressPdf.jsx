@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
+import GoogleSignInGate from '../components/GoogleSignInGate.jsx'
 import { compressPdf, ApiError } from '../lib/api.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
@@ -57,35 +58,37 @@ export default function CompressPdf() {
       {error && <div className="alert alert-error">{error}</div>}
       {done && <div className="alert alert-success">تم الضغط بنجاح، بدأ تنزيل الملف.</div>}
 
-      <div className="card">
-        <FileDrop accept="application/pdf" onFiles={handleFiles} hint={`PDF فقط — حتى ${MAX_FILE_MB}MB`} />
-        {file && (
-          <div className="file-list">
-            <div className="file-row">
-              <span>{file.name}</span>
-              <button type="button" onClick={() => setFile(null)}>✕</button>
+      <GoogleSignInGate>
+        <div className="card">
+          <FileDrop accept="application/pdf" onFiles={handleFiles} hint={`PDF فقط — حتى ${MAX_FILE_MB}MB`} />
+          {file && (
+            <div className="file-list">
+              <div className="file-row">
+                <span>{file.name}</span>
+                <button type="button" onClick={() => setFile(null)}>✕</button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="card">
+          <div className="field">
+            <label>مستوى الضغط</label>
+            <div className="radio-group">
+              {PROFILES.map((p) => (
+                <label key={p.id}>
+                  <input type="radio" checked={profile === p.id} onChange={() => setProfile(p.id)} /> {p.label}
+                </label>
+              ))}
             </div>
           </div>
-        )}
-      </div>
-
-      <div className="card">
-        <div className="field">
-          <label>مستوى الضغط</label>
-          <div className="radio-group">
-            {PROFILES.map((p) => (
-              <label key={p.id}>
-                <input type="radio" checked={profile === p.id} onChange={() => setProfile(p.id)} /> {p.label}
-              </label>
-            ))}
-          </div>
         </div>
-      </div>
 
-      <button className="btn" disabled={!file || loading} onClick={handleCompress}>
-        {loading && <span className="spinner" />}
-        {loading ? 'جارٍ الضغط...' : 'ضغط الملف وتنزيل'}
-      </button>
+        <button className="btn" disabled={!file || loading} onClick={handleCompress}>
+          {loading && <span className="spinner" />}
+          {loading ? 'جارٍ الضغط...' : 'ضغط الملف وتنزيل'}
+        </button>
+      </GoogleSignInGate>
     </div>
   )
 }
