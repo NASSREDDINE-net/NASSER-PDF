@@ -56,6 +56,12 @@ const TOOLS = [
     description: 'قلّل حجم ملف PDF مع الحفاظ على جودة معقولة.'
   },
   {
+    to: '/protect-pdf',
+    icon: '🔒',
+    title: 'حماية PDF',
+    description: 'أضف كلمة مرور لملف PDF أو أزل كلمة مرور موجودة تعرفها.'
+  },
+  {
     to: '/compare-pdf',
     icon: '🔍',
     title: 'مقارنة PDF',

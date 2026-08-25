@@ -22,6 +22,11 @@ export async function compressPdf(file, profile = 'web') {
   return convertViaCloudConvert(file, { mode: 'compress', profile })
 }
 
+export async function protectPdf(file, action, password) {
+  // الحماية/فك الحماية متاحة فقط عبر CloudConvert حالياً
+  return convertViaCloudConvert(file, { mode: 'protect', action, password })
+}
+
 /**
  * يجرّب CloudConvert أولاً؛ إذا فشل ويوجد خادم LibreOffice احتياطي مهيأ
  * (VITE_RENDER_API_URL)، يعيد المحاولة عليه قبل الاستسلام.

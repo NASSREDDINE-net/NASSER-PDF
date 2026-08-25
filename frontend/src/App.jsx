@@ -21,6 +21,7 @@ const FillPdfForm = lazy(() => import('./pages/FillPdfForm.jsx'))
 const PdfToWord = lazy(() => import('./pages/PdfToWord.jsx'))
 const PdfToExcel = lazy(() => import('./pages/PdfToExcel.jsx'))
 const CompressPdf = lazy(() => import('./pages/CompressPdf.jsx'))
+const ProtectPdf = lazy(() => import('./pages/ProtectPdf.jsx'))
 const ComparePdf = lazy(() => import('./pages/ComparePdf.jsx'))
 const OcrTool = lazy(() => import('./pages/OcrTool.jsx'))
 const Privacy = lazy(() => import('./pages/Privacy.jsx'))
@@ -59,6 +60,7 @@ export default function App() {
             <Route path="/pdf-to-word" element={<PdfToWord />} />
             <Route path="/pdf-to-excel" element={<PdfToExcel />} />
             <Route path="/compress-pdf" element={<CompressPdf />} />
+            <Route path="/protect-pdf" element={<ProtectPdf />} />
             <Route path="/compare-pdf" element={<ComparePdf />} />
             <Route path="/ocr" element={<OcrTool />} />
             <Route path="/privacy" element={<Privacy />} />
