@@ -1,5 +1,5 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "rewrites": [{ "source": "/((?!api/|_vercel/).*)", "destination": "/index.html" }],
   "functions": {
     "api/convert-job.js": {
       "maxDuration": 20
