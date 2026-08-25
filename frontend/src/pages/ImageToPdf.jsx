@@ -1,10 +1,33 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
+import SeoContent from '../components/SeoContent.jsx'
 import { imagesToPdf, downloadBlob } from '../lib/imagePdf.js'
 
 const MAX_FILE_MB = 50
 const MAX_FILES = 100
 const ACCEPTED = ['image/png', 'image/jpeg']
+
+const seo = {
+  about: {
+    heading: 'تحويل الصور إلى PDF أونلاين مجاناً',
+    paragraphs: [
+      'اجمع عدة صور بصيغة PNG أو JPG في ملف PDF واحد، مع تحكم كامل في ترتيب الصور، حجم الصفحة، الاتجاه، والهوامش.',
+      'مفيدة لتحويل صور المستندات الممسوحة ضوئياً بالهاتف، الفواتير المصورة، أو مجموعة صور تريد إرسالها كملف واحد منظم بدل صور متفرقة.'
+    ]
+  },
+  steps: {
+    heading: 'كيف تحوّل الصور إلى PDF؟',
+    items: [
+      'ارفع صورة واحدة أو أكثر بصيغة PNG أو JPG.',
+      'رتّب الصور بالسحب للأعلى أو الأسفل، واختر حجم الصفحة والاتجاه والجودة المناسبة.',
+      'اضغط تحويل إلى PDF وسيبدأ تنزيل الملف تلقائياً.'
+    ]
+  },
+  faq: [
+    { q: 'كم صورة يمكنني تحويلها دفعة واحدة؟', a: 'يمكنك رفع حتى 100 صورة في نفس العملية، بحد أقصى 50 ميجابايت لكل صورة.' },
+    { q: 'هل يمكنني التحكم في جودة الصور داخل الملف؟', a: 'نعم، توجد أداة تحكم في نسبة الضغط/الجودة قبل إنشاء ملف PDF النهائي.' }
+  ]
+}
 
 export default function ImageToPdf() {
   const [images, setImages] = useState([]) // { id, file, previewUrl }
@@ -150,6 +173,8 @@ export default function ImageToPdf() {
         {loading && <span className="spinner" />}
         {loading ? 'جارٍ الإنشاء...' : `تحويل ${images.length || ''} إلى PDF وتنزيل`}
       </button>
+
+      <SeoContent {...seo} />
     </div>
   )
 }

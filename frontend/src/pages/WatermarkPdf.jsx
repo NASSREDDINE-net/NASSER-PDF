@@ -1,9 +1,32 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
+import SeoContent from '../components/SeoContent.jsx'
 import { watermarkPdf } from '../lib/pdfEdit.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
 const MAX_FILE_MB = 75
+
+const seo = {
+  about: {
+    heading: 'إضافة علامة مائية لملف PDF أونلاين مجاناً',
+    paragraphs: [
+      'أضف نص علامة مائية (Watermark) فوق جميع صفحات ملف PDF، مع تحكم كامل في اللون، الشفافية، حجم الخط، وزاوية الدوران.',
+      'مفيدة لحماية المستندات من النسخ غير المصرح به، وضع كلمة "سري" أو "مسودة" على العقود، أو إضافة اسم شركتك على المستندات قبل مشاركتها.'
+    ]
+  },
+  steps: {
+    heading: 'كيف تضيف علامة مائية لملف PDF؟',
+    items: [
+      'ارفع ملف PDF الذي تريد إضافة العلامة المائية عليه.',
+      'اكتب النص الذي تريده، واختر اللون، الشفافية، حجم الخط، وزاوية الدوران المناسبة.',
+      'اضغط إضافة العلامة المائية وتنزيل — سيتم تطبيقها على كل صفحات الملف.'
+    ]
+  },
+  faq: [
+    { q: 'هل يمكنني وضع شعار صورة بدل النص؟', a: 'حالياً الأداة تدعم النص فقط. لإضافة صورة أو شعار كعلامة مائية، يمكنك استخدام أداة "تحرير PDF" ووضع الصورة يدوياً.' },
+    { q: 'هل العلامة المائية تظهر على كل الصفحات؟', a: 'نعم، يتم تطبيقها تلقائياً على جميع صفحات الملف بنفس الإعدادات.' }
+  ]
+}
 
 export default function WatermarkPdf() {
   const [file, setFile] = useState(null)
@@ -110,6 +133,8 @@ export default function WatermarkPdf() {
         {loading && <span className="spinner" />}
         {loading ? 'جارٍ الإضافة...' : 'إضافة العلامة المائية وتنزيل'}
       </button>
+
+      <SeoContent {...seo} />
     </div>
   )
 }

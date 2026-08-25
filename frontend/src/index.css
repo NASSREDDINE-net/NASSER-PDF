@@ -228,6 +228,50 @@ button {
   margin-bottom: 20px;
 }
 
+/* SEO content */
+.seo-content {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+.seo-content h2 {
+  font-size: 1.2rem;
+  margin: 28px 0 12px;
+}
+
+.seo-content h2:first-child {
+  margin-top: 0;
+}
+
+.seo-content p {
+  color: var(--ink-soft);
+  line-height: 1.8;
+  margin-bottom: 10px;
+}
+
+.seo-content ol {
+  color: var(--ink-soft);
+  line-height: 1.9;
+  padding-inline-start: 22px;
+}
+
+.seo-content details {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+}
+
+.seo-content summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.seo-content details p {
+  margin: 10px 0 0;
+}
+
 /* File drop */
 .dropzone {
   border: 2px dashed var(--border);

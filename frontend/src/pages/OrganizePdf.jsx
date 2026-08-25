@@ -1,9 +1,32 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
+import SeoContent from '../components/SeoContent.jsx'
 import { getPdfPageCount, organizePdf } from '../lib/pdfEdit.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
 const MAX_FILE_MB = 75
+
+const seo = {
+  about: {
+    heading: 'ترتيب وتدوير صفحات PDF أونلاين مجاناً',
+    paragraphs: [
+      'أداة ترتيب صفحات PDF تتيح لك إعادة ترتيب الصفحات، حذف صفحات غير مرغوبة، وتدوير أي صفحة بزاوية معينة، كل ذلك بمعاينة مباشرة قبل الحفظ.',
+      'مفيدة لتصحيح ملف تم مسحه ضوئياً بترتيب أو اتجاه خاطئ، أو لإزالة صفحات فارغة قبل إرسال المستند.'
+    ]
+  },
+  steps: {
+    heading: 'كيف ترتّب صفحات PDF؟',
+    items: [
+      'ارفع ملف PDF لتظهر لك قائمة بجميع صفحاته.',
+      'استخدم الأسهم لتحريك الصفحات، أزرار التدوير لتغيير الاتجاه، وزر الحذف لإزالة أي صفحة غير مرغوبة.',
+      'اضغط حفظ التعديلات وتنزيل للحصول على النسخة الجديدة من الملف.'
+    ]
+  },
+  faq: [
+    { q: 'هل يمكنني استرجاع صفحة حذفتها بالخطأ؟', a: 'يمكنك إعادة رفع الملف الأصلي من جديد قبل حفظ التعديلات، لأن الحذف لا يُطبَّق نهائياً إلا بعد الضغط على زر الحفظ.' },
+    { q: 'هل التعديلات تتم على جهازي أم على الخادم؟', a: 'كل المعالجة تتم بالكامل داخل متصفحك، لا يتم رفع الملف لأي خادم.' }
+  ]
+}
 
 export default function OrganizePdf() {
   const [file, setFile] = useState(null)
@@ -105,6 +128,8 @@ export default function OrganizePdf() {
         {loading && <span className="spinner" />}
         {loading ? 'جارٍ الحفظ...' : 'حفظ التعديلات وتنزيل'}
       </button>
+
+      <SeoContent {...seo} />
     </div>
   )
 }

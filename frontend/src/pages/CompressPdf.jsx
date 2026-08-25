@@ -1,10 +1,33 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
 import GoogleSignInGate from '../components/GoogleSignInGate.jsx'
+import SeoContent from '../components/SeoContent.jsx'
 import { compressPdf, ApiError } from '../lib/api.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
 const MAX_FILE_MB = 100
+
+const seo = {
+  about: {
+    heading: 'ضغط ملفات PDF أونلاين مجاناً',
+    paragraphs: [
+      'أداة ضغط PDF تقلل حجم ملفك مع الحفاظ على جودة معقولة، وذلك باختيار المستوى المناسب: جودة عالية للطباعة، متوازن للاستخدام العام، أو أصغر حجم ممكن للمشاركة السريعة.',
+      'مفيدة عندما يرفض بريد إلكتروني أو موقع إرفاق ملف PDF كبير الحجم، أو عندما تريد توفير مساحة تخزين.'
+    ]
+  },
+  steps: {
+    heading: 'كيف تضغط ملف PDF؟',
+    items: [
+      'ارفع ملف PDF الذي تريد تقليل حجمه.',
+      'اختر مستوى الضغط المناسب لاحتياجك.',
+      'اضغط ضغط الملف وتنزيل للحصول على النسخة المصغّرة.'
+    ]
+  },
+  faq: [
+    { q: 'كم يمكن أن يقل حجم الملف؟', a: 'يعتمد ذلك على محتوى الملف — الملفات التي تحتوي على صور عالية الدقة تستفيد من الضغط أكثر من الملفات النصية البحتة.' },
+    { q: 'هل الضغط يؤثر على وضوح النص؟', a: 'النص يبقى واضحاً في كل المستويات؛ الضغط يؤثر بشكل أساسي على جودة الصور المضمّنة في الملف.' }
+  ]
+}
 const PROFILES = [
   { id: 'print', label: 'جودة عالية (ضغط أقل)' },
   { id: 'web', label: 'متوازن (موصى به)' },
@@ -89,6 +112,8 @@ export default function CompressPdf() {
           {loading ? 'جارٍ الضغط...' : 'ضغط الملف وتنزيل'}
         </button>
       </GoogleSignInGate>
+
+      <SeoContent {...seo} />
     </div>
   )
 }

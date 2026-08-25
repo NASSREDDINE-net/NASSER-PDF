@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import FileDrop from './FileDrop.jsx'
 import GoogleSignInGate from './GoogleSignInGate.jsx'
+import SeoContent from './SeoContent.jsx'
 import { convertOfficeToPdf, ApiError } from '../lib/api.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
@@ -15,7 +16,8 @@ export default function OfficeToPdf({
   convertFn = convertOfficeToPdf,
   outputExtension = 'pdf',
   buttonLabel = 'تحويل إلى PDF وتنزيل',
-  loadingLabel = 'جارٍ التحويل...'
+  loadingLabel = 'جارٍ التحويل...',
+  seo
 }) {
   const [file, setFile] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -82,6 +84,8 @@ export default function OfficeToPdf({
           {loading ? loadingLabel : buttonLabel}
         </button>
       </GoogleSignInGate>
+
+      {seo && <SeoContent {...seo} />}
     </div>
   )
 }

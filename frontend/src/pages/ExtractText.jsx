@@ -1,9 +1,32 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
+import SeoContent from '../components/SeoContent.jsx'
 import { loadPdfForRendering, extractPdfText } from '../lib/pdfRender.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
 const MAX_FILE_MB = 75
+
+const seo = {
+  about: {
+    heading: 'استخراج النص من ملف PDF أونلاين مجاناً',
+    paragraphs: [
+      'استخرج كل النص الموجود داخل ملف PDF بضغطة واحدة، ثم انسخه مباشرة أو حمّله كملف نصي (.txt) عادي.',
+      'مفيدة لاقتباس محتوى من تقرير أو بحث، إعادة استخدام نص من عقد قديم، أو تجهيز محتوى ملف PDF للمعالجة في أداة أخرى.'
+    ]
+  },
+  steps: {
+    heading: 'كيف تستخرج النص من PDF؟',
+    items: [
+      'ارفع ملف PDF الذي يحتوي على النص المطلوب.',
+      'انتظر ثوانٍ ريثما يتم استخراج النص من كل الصفحات تلقائياً.',
+      'انسخ النص مباشرة أو حمّله كملف .txt.'
+    ]
+  },
+  faq: [
+    { q: 'لماذا لم يظهر أي نص بعد الاستخراج؟', a: 'إذا كان ملف PDF عبارة عن صور ممسوحة ضوئياً بدون طبقة نص، لن تستطيع هذه الأداة استخراج نص منه — استخدم أداة "OCR" بدلاً من ذلك.' },
+    { q: 'هل يحافظ الاستخراج على تنسيق الفقرات؟', a: 'يتم استخراج النص الخام مع فصل بسيط بين الصفحات، دون الحفاظ على التنسيق البصري الأصلي.' }
+  ]
+}
 
 export default function ExtractText() {
   const [file, setFile] = useState(null)
@@ -89,6 +112,8 @@ export default function ExtractText() {
           </div>
         </div>
       )}
+
+      <SeoContent {...seo} />
     </div>
   )
 }

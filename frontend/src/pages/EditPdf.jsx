@@ -1,11 +1,35 @@
 import { useEffect, useRef, useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
+import SeoContent from '../components/SeoContent.jsx'
 import { loadPdfForRendering, renderPageToDataUrl } from '../lib/pdfRender.js'
 import { getPdfPageCount } from '../lib/pdfEdit.js'
 import { applyAnnotations } from '../lib/pdfEditApply.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
 const MAX_FILE_MB = 75
+
+const seo = {
+  about: {
+    heading: 'تحرير ملفات PDF أونلاين مجاناً',
+    paragraphs: [
+      'محرر PDF المتكامل يتيح لك إضافة نص، صور، أشكال (مستطيلات ودوائر)، رسم حر، تظليل، إخفاء معلومات حساسة، أو توقيع مباشرة فوق أي صفحة من ملف PDF، مباشرة من متصفحك بدون تثبيت أي برنامج.',
+      'بديل مجاني لأدوات مثل Adobe Acrobat أو Smallpdf لتعديل مستند PDF بسرعة دون الحاجة لتحويله إلى Word أولاً.'
+    ]
+  },
+  steps: {
+    heading: 'كيف تحرّر ملف PDF؟',
+    items: [
+      'ارفع ملف PDF الذي تريد تعديله.',
+      'اختر الأداة المناسبة من الشريط العلوي (نص، صورة، شكل، رسم، توقيع، تظليل، أو إخفاء) وطبّقها فوق الصفحة.',
+      'تنقّل بين الصفحات حسب الحاجة، ثم اضغط حفظ وتنزيل PDF للحصول على النسخة المعدّلة.'
+    ]
+  },
+  faq: [
+    { q: 'هل يمكنني توقيع مستند إلكترونياً؟', a: 'نعم، أداة "توقيع" تتيح لك رسم توقيعك بالماوس أو باللمس ووضعه في أي مكان بالصفحة.' },
+    { q: 'كيف أخفي معلومات حساسة في المستند؟', a: 'استخدم أداة "إخفاء" (Whiteout) لتغطية أي جزء من النص بمستطيل أبيض غير شفاف قبل مشاركة الملف.' },
+    { q: 'هل يتم رفع ملفي إلى خادم خارجي؟', a: 'لا، كل عمليات التحرير تتم بالكامل داخل متصفحك دون رفع الملف لأي خادم.' }
+  ]
+}
 
 const TOOLS = [
   { id: 'select', label: 'تحديد' },
@@ -568,6 +592,8 @@ export default function EditPdf() {
           </p>
         </>
       )}
+
+      <SeoContent {...seo} />
     </div>
   )
 }

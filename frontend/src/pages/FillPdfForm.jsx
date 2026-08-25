@@ -1,9 +1,32 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
+import SeoContent from '../components/SeoContent.jsx'
 import { loadFormFields, fillForm } from '../lib/pdfForms.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
 const MAX_FILE_MB = 75
+
+const seo = {
+  about: {
+    heading: 'تعبئة نماذج PDF أونلاين مجاناً',
+    paragraphs: [
+      'أداة تعبئة نماذج PDF تكتشف تلقائياً الحقول القابلة للتعبئة (نص، مربعات اختيار، قوائم منسدلة) داخل ملف PDF وتتيح لك ملأها مباشرة من المتصفح دون طباعة الملف.',
+      'مناسبة لتعبئة استمارات رسمية، طلبات توظيف، أو أي نموذج PDF تفاعلي تستلمه عبر البريد الإلكتروني.'
+    ]
+  },
+  steps: {
+    heading: 'كيف تعبّئ نموذج PDF؟',
+    items: [
+      'ارفع ملف PDF الذي يحتوي على النموذج.',
+      'ستظهر كل الحقول القابلة للتعبئة تلقائياً — املأها واحداً تلو الآخر.',
+      'اضغط تعبئة وتنزيل للحصول على النسخة المكتملة من الملف.'
+    ]
+  },
+  faq: [
+    { q: 'ماذا لو ظهرت رسالة "لا توجد حقول قابلة للتعبئة"؟', a: 'هذا يعني أن ملف PDF لا يحتوي على نموذج تفاعلي حقيقي، بل هو نص أو صورة ثابتة. يمكنك استخدام أداة "تحرير PDF" لإضافة النص يدوياً في هذه الحالة.' },
+    { q: 'هل يدعم كل أنواع الحقول؟', a: 'نعم، يدعم حقول النص، مربعات الاختيار، الأزرار الدائرية (radio)، والقوائم المنسدلة.' }
+  ]
+}
 
 export default function FillPdfForm() {
   const [file, setFile] = useState(null)
@@ -131,6 +154,8 @@ export default function FillPdfForm() {
           {loading ? 'جارٍ التعبئة...' : 'تعبئة وتنزيل PDF'}
         </button>
       )}
+
+      <SeoContent {...seo} />
     </div>
   )
 }

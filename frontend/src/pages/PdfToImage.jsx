@@ -1,11 +1,34 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
+import SeoContent from '../components/SeoContent.jsx'
 import { loadPdfForRendering, renderPageToImageBlob } from '../lib/pdfRender.js'
 import { getPdfPageCount, parsePageRanges } from '../lib/pdfEdit.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 import { downloadFilesAsZip } from '../lib/zip.js'
 
 const MAX_FILE_MB = 75
+
+const seo = {
+  about: {
+    heading: 'تحويل PDF إلى صور PNG أو JPG أونلاين مجاناً',
+    paragraphs: [
+      'حوّل كل صفحة من ملف PDF إلى صورة منفصلة بصيغة PNG أو JPG، مع اختيار مستوى الجودة (من سريعة ومنخفضة الحجم إلى عالية الدقة) ونطاق الصفحات المطلوب.',
+      'مفيدة لمشاركة صفحة واحدة من مستند على وسائل التواصل الاجتماعي، أو استخدام محتوى PDF داخل عرض تقديمي أو تصميم جرافيكي.'
+    ]
+  },
+  steps: {
+    heading: 'كيف تحوّل PDF إلى صور؟',
+    items: [
+      'ارفع ملف PDF الذي تريد تحويله.',
+      'اختر الصيغة (PNG أو JPG)، مستوى الجودة، والصفحات المطلوبة (الكل أو نطاق محدد).',
+      'اضغط تحويل وتنزيل — صورة واحدة تُنزَّل مباشرة، وعدة صور تُجمَّع في ملف مضغوط.'
+    ]
+  },
+  faq: [
+    { q: 'ما الفرق بين PNG وJPG هنا؟', a: 'PNG يحافظ على جودة أعلى للنصوص والرسومات الدقيقة، بينما JPG أصغر حجماً ومناسب أكثر للصور الفوتوغرافية.' },
+    { q: 'هل يمكنني تحويل صفحة واحدة فقط؟', a: 'نعم، اختر "نطاق محدد" واكتب رقم الصفحة أو النطاق الذي تريده.' }
+  ]
+}
 const QUALITY_PRESETS = {
   low: { label: 'منخفضة (سريعة)', width: 900 },
   medium: { label: 'متوسطة', width: 1500 },
@@ -146,6 +169,8 @@ export default function PdfToImage() {
         {loading && <span className="spinner" />}
         {loading ? 'جارٍ التحويل...' : 'تحويل وتنزيل'}
       </button>
+
+      <SeoContent {...seo} />
     </div>
   )
 }

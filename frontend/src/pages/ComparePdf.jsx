@@ -1,8 +1,31 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
+import SeoContent from '../components/SeoContent.jsx'
 import { loadPdfForRendering, extractPdfText } from '../lib/pdfRender.js'
 
 const MAX_FILE_MB = 75
+
+const seo = {
+  about: {
+    heading: 'مقارنة ملفي PDF أونلاين مجاناً',
+    paragraphs: [
+      'أداة مقارنة PDF تقارن نص ملفين تلقائياً وتُظهر الفروقات كلمة بكلمة، مع تلوين الإضافات باللون الأخضر والحذف باللون الأحمر.',
+      'مفيدة لمقارنة نسختين من عقد بعد التفاوض، تتبع التغييرات بين إصدارين من تقرير، أو التأكد من عدم وجود تعديلات غير مقصودة في مستند.'
+    ]
+  },
+  steps: {
+    heading: 'كيف تقارن ملفي PDF؟',
+    items: [
+      'ارفع الملف الأول ثم الملف الثاني.',
+      'اضغط "قارن الملفين" لتحليل النصين.',
+      'راجع النتيجة: النص المضاف يظهر باللون الأخضر، والمحذوف بخط مشطوب أحمر.'
+    ]
+  },
+  faq: [
+    { q: 'هل تقارن التصميم أيضاً أم النص فقط؟', a: 'المقارنة نصية فقط (كلمة بكلمة)، ولا تقارن التنسيق البصري أو الصور.' },
+    { q: 'هل تعمل مع ملفات PDF ممسوحة ضوئياً؟', a: 'تحتاج الملفات إلى طبقة نص فعلية؛ للملفات الممسوحة ضوئياً استخدم أداة OCR أولاً على كل ملف.' }
+  ]
+}
 
 export default function ComparePdf() {
   const [fileA, setFileA] = useState(null)
@@ -122,6 +145,8 @@ export default function ComparePdf() {
           ))}
         </div>
       )}
+
+      <SeoContent {...seo} />
     </div>
   )
 }

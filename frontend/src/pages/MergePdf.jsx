@@ -1,10 +1,33 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
+import SeoContent from '../components/SeoContent.jsx'
 import { mergePdfs } from '../lib/pdfEdit.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
 const MAX_FILE_MB = 75
 const MAX_FILES = 50
+
+const seo = {
+  about: {
+    heading: 'دمج ملفات PDF أونلاين مجاناً',
+    paragraphs: [
+      'أداة دمج PDF تتيح لك جمع عدة ملفات PDF في ملف واحد منظم، مع إمكانية إعادة ترتيبها بالسحب قبل الدمج النهائي.',
+      'مفيدة لدمج فصول كتاب، أوراق امتحان، فواتير شهرية متعددة، أو أي مجموعة مستندات تحتاج تسليمها كملف واحد بدل عدة ملفات منفصلة.'
+    ]
+  },
+  steps: {
+    heading: 'كيف تدمج ملفات PDF؟',
+    items: [
+      'ارفع ملفين PDF أو أكثر (حتى 50 ملفاً).',
+      'رتّب الملفات بالترتيب الذي تريده باستخدام أسهم التحريك.',
+      'اضغط دمج الملفات وتنزيل — سيتم إنشاء ملف PDF واحد يحتوي على كل الصفحات بالترتيب المحدد.'
+    ]
+  },
+  faq: [
+    { q: 'كم ملف يمكنني دمجه دفعة واحدة؟', a: 'يمكنك دمج حتى 50 ملف PDF، بحد أقصى 75 ميجابايت لكل ملف.' },
+    { q: 'هل يبقى ترتيب الصفحات داخل كل ملف كما هو؟', a: 'نعم، فقط ترتيب الملفات نفسها هو ما يمكنك التحكم فيه؛ الصفحات داخل كل ملف تبقى بترتيبها الأصلي.' }
+  ]
+}
 
 export default function MergePdf() {
   const [files, setFiles] = useState([]) // { id, file }
@@ -96,6 +119,8 @@ export default function MergePdf() {
         {loading ? 'جارٍ الدمج...' : `دمج ${files.length || ''} ملفات وتنزيل`}
       </button>
       {files.length === 1 && <p className="hint" style={{ marginTop: 10 }}>أضف ملف واحد على الأقل إضافي للدمج.</p>}
+
+      <SeoContent {...seo} />
     </div>
   )
 }

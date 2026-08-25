@@ -1,10 +1,33 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
+import SeoContent from '../components/SeoContent.jsx'
 import { getPdfPageCount, parsePageRanges, splitPdfByRanges, splitPdfToSinglePages } from '../lib/pdfEdit.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 import { downloadFilesAsZip } from '../lib/zip.js'
 
 const MAX_FILE_MB = 75
+
+const seo = {
+  about: {
+    heading: 'تقسيم ملفات PDF أونلاين مجاناً',
+    paragraphs: [
+      'أداة تقسيم PDF تتيح لك استخراج نطاق صفحات محدد من ملف PDF، أو تقسيم كل صفحة إلى ملف مستقل، بدون الحاجة لأي برنامج خارجي.',
+      'مفيدة عندما تحتاج فصل فصل معين من كتاب، استخراج صفحة واحدة من عقد طويل، أو تقسيم ملف كبير إلى ملفات أصغر يسهل إرسالها.'
+    ]
+  },
+  steps: {
+    heading: 'كيف تقسّم ملف PDF؟',
+    items: [
+      'ارفع ملف PDF الذي تريد تقسيمه.',
+      'اختر بين استخراج نطاقات صفحات محددة (مثل 1-3,5,7-9) أو تقسيم كل صفحة إلى ملف منفصل.',
+      'اضغط تقسيم وتنزيل — إذا كانت النتيجة أكثر من ملف، سيتم تجميعها في ملف مضغوط (zip).'
+    ]
+  },
+  faq: [
+    { q: 'كيف أكتب نطاق الصفحات؟', a: 'استخدم صيغة مثل 1-3,5,7-9 لاستخراج الصفحات من 1 إلى 3، ثم الصفحة 5، ثم من 7 إلى 9، كل نطاق في ملف منفصل.' },
+    { q: 'هل يمكنني تقسيم ملف محمي بكلمة مرور؟', a: 'حالياً الأداة تدعم فقط ملفات PDF غير المحمية بكلمة مرور.' }
+  ]
+}
 
 export default function SplitPdf() {
   const [file, setFile] = useState(null)
@@ -117,6 +140,8 @@ export default function SplitPdf() {
         {loading && <span className="spinner" />}
         {loading ? 'جارٍ التقسيم...' : 'تقسيم وتنزيل'}
       </button>
+
+      <SeoContent {...seo} />
     </div>
   )
 }
