@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://nasserpdf.devs.surf/</loc><priority>1.0</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/word-to-pdf</loc><priority>0.8</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/excel-to-pdf</loc><priority>0.8</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/image-to-pdf</loc><priority>0.8</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/qr-code</loc><priority>0.7</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/pdf-editor</loc><priority>0.8</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/merge-pdf</loc><priority>0.8</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/split-pdf</loc><priority>0.8</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/organize-pdf</loc><priority>0.7</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/watermark-pdf</loc><priority>0.7</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/edit-pdf</loc><priority>0.8</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/pdf-to-image</loc><priority>0.8</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/extract-text</loc><priority>0.7</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/fill-pdf-form</loc><priority>0.7</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/pdf-to-word</loc><priority>0.8</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/pdf-to-excel</loc><priority>0.8</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/compress-pdf</loc><priority>0.7</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/compare-pdf</loc><priority>0.6</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/ocr</loc><priority>0.7</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/about</loc><priority>0.4</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/privacy</loc><priority>0.3</priority></url>
+  <url><loc>https://nasserpdf.devs.surf/terms</loc><priority>0.3</priority></url>
+</urlset>
