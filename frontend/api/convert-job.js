@@ -16,6 +16,7 @@ const CONVERT_RULES = {
 }
 
 const COMPRESS_PROFILES = new Set(['web', 'print', 'archive'])
+const PROTECT_ACTIONS = new Set(['add', 'remove'])
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -38,7 +39,7 @@ export default async function handler(req, res) {
   }
 
   const filename = typeof req.body?.filename === 'string' ? req.body.filename : 'file'
-  const mode = req.body?.mode === 'compress' ? 'compress' : 'convert'
+  const mode = req.body?.mode === 'compress' ? 'compress' : req.body?.mode === 'protect' ? 'protect' : 'convert'
   const ext = filename.split('.').pop()?.toLowerCase()
 
   let convertTask
@@ -50,6 +51,21 @@ export default async function handler(req, res) {
       return
     }
     convertTask = { operation: 'optimize', input: 'import-file', input_format: 'pdf', profile }
+  } else if (mode === 'protect') {
+    const action = PROTECT_ACTIONS.has(req.body?.action) ? req.body.action : 'add'
+    const password = typeof req.body?.password === 'string' ? req.body.password : ''
+    if (ext !== 'pdf') {
+      res.status(400).json({ error: 'هذه الأداة متاحة فقط لملفات PDF.' })
+      return
+    }
+    if (!password) {
+      res.status(400).json({ error: 'كلمة المرور مطلوبة.' })
+      return
+    }
+    convertTask =
+      action === 'add'
+        ? { operation: 'convert', input: 'import-file', input_format: 'pdf', output_format: 'pdf', engine: 'pdftk', password }
+        : { operation: 'convert', input: 'import-file', input_format: 'pdf', output_format: 'pdf', engine: 'pdftk', input_password: password }
   } else {
     const target = typeof req.body?.target === 'string' ? req.body.target : 'pdf'
     const allowedExts = CONVERT_RULES[target]
