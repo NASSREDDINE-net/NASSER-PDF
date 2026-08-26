@@ -2,6 +2,7 @@ import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
 import GoogleSignInGate from '../components/GoogleSignInGate.jsx'
 import SeoContent from '../components/SeoContent.jsx'
+import { useT } from '../lib/i18n.jsx'
 import { protectPdf, ApiError } from '../lib/api.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
@@ -29,7 +30,45 @@ const seo = {
   ]
 }
 
+const TXT = {
+  ar: {
+    title: 'حماية PDF بكلمة مرور',
+    lead: 'أضف كلمة مرور لملف PDF لمنع فتحه بدونها، أو أزل كلمة مرور موجودة إذا كنت تعرفها.',
+    badType: 'صيغة غير مدعومة. يُسمح فقط بملفات PDF.',
+    tooBig: `حجم الملف أكبر من ${MAX_FILE_MB}MB.`,
+    unexpected: 'حدث خطأ غير متوقع.',
+    success: 'تمت العملية بنجاح، بدأ تنزيل الملف.',
+    hint: `PDF فقط — حتى ${MAX_FILE_MB}MB`,
+    actionLabel: 'العملية',
+    addOption: 'إضافة حماية (تعيين كلمة مرور جديدة)',
+    removeOption: 'إزالة حماية (أعرف كلمة المرور الحالية)',
+    newPassword: 'كلمة المرور الجديدة',
+    currentPassword: 'كلمة المرور الحالية',
+    loading: 'جارٍ المعالجة...',
+    addButton: 'إضافة الحماية وتنزيل',
+    removeButton: 'إزالة الحماية وتنزيل'
+  },
+  en: {
+    title: 'Protect PDF with a password',
+    lead: 'Add a password to a PDF so it can’t be opened without it, or remove an existing password if you know it.',
+    badType: 'Unsupported format. Only PDF files are allowed.',
+    tooBig: `File is larger than ${MAX_FILE_MB}MB.`,
+    unexpected: 'An unexpected error occurred.',
+    success: 'Done — your file download has started.',
+    hint: `PDF only — up to ${MAX_FILE_MB}MB`,
+    actionLabel: 'Action',
+    addOption: 'Add protection (set a new password)',
+    removeOption: 'Remove protection (I know the current password)',
+    newPassword: 'New password',
+    currentPassword: 'Current password',
+    loading: 'Processing...',
+    addButton: 'Add protection and download',
+    removeButton: 'Remove protection and download'
+  }
+}
+
 export default function ProtectPdf() {
+  const t = useT(TXT)
   const [file, setFile] = useState(null)
   const [action, setAction] = useState('add')
   const [password, setPassword] = useState('')
@@ -42,11 +81,11 @@ export default function ProtectPdf() {
     setError('')
     setDone(false)
     if (picked.type !== 'application/pdf') {
-      setError('صيغة غير مدعومة. يُسمح فقط بملفات PDF.')
+      setError(t.badType)
       return
     }
     if (picked.size > MAX_FILE_MB * 1024 * 1024) {
-      setError(`حجم الملف أكبر من ${MAX_FILE_MB}MB.`)
+      setError(t.tooBig)
       return
     }
     setFile(picked)
@@ -63,7 +102,7 @@ export default function ProtectPdf() {
       downloadBlob(blob, outName)
       setDone(true)
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'حدث خطأ غير متوقع.')
+      setError(err instanceof ApiError ? err.message : t.unexpected)
     } finally {
       setLoading(false)
     }
@@ -71,15 +110,15 @@ export default function ProtectPdf() {
 
   return (
     <div className="tool-page">
-      <h1>حماية PDF بكلمة مرور</h1>
-      <p className="lead">أضف كلمة مرور لملف PDF لمنع فتحه بدونها، أو أزل كلمة مرور موجودة إذا كنت تعرفها.</p>
+      <h1>{t.title}</h1>
+      <p className="lead">{t.lead}</p>
 
       {error && <div className="alert alert-error">{error}</div>}
-      {done && <div className="alert alert-success">تمت العملية بنجاح، بدأ تنزيل الملف.</div>}
+      {done && <div className="alert alert-success">{t.success}</div>}
 
       <GoogleSignInGate>
         <div className="card">
-          <FileDrop accept="application/pdf" onFiles={handleFiles} hint={`PDF فقط — حتى ${MAX_FILE_MB}MB`} />
+          <FileDrop accept="application/pdf" onFiles={handleFiles} hint={t.hint} />
           {file && (
             <div className="file-list">
               <div className="file-row">
@@ -92,26 +131,26 @@ export default function ProtectPdf() {
 
         <div className="card">
           <div className="field">
-            <label>العملية</label>
+            <label>{t.actionLabel}</label>
             <div className="radio-group">
               <label>
-                <input type="radio" checked={action === 'add'} onChange={() => setAction('add')} /> إضافة حماية (تعيين كلمة مرور جديدة)
+                <input type="radio" checked={action === 'add'} onChange={() => setAction('add')} /> {t.addOption}
               </label>
               <label>
-                <input type="radio" checked={action === 'remove'} onChange={() => setAction('remove')} /> إزالة حماية (أعرف كلمة المرور الحالية)
+                <input type="radio" checked={action === 'remove'} onChange={() => setAction('remove')} /> {t.removeOption}
               </label>
             </div>
           </div>
 
           <div className="field">
-            <label>{action === 'add' ? 'كلمة المرور الجديدة' : 'كلمة المرور الحالية'}</label>
+            <label>{action === 'add' ? t.newPassword : t.currentPassword}</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
         </div>
 
         <button className="btn" disabled={!file || !password.trim() || loading} onClick={handleRun}>
           {loading && <span className="spinner" />}
-          {loading ? 'جارٍ المعالجة...' : action === 'add' ? 'إضافة الحماية وتنزيل' : 'إزالة الحماية وتنزيل'}
+          {loading ? t.loading : action === 'add' ? t.addButton : t.removeButton}
         </button>
       </GoogleSignInGate>
 

@@ -1,11 +1,37 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
 import SeoContent from '../components/SeoContent.jsx'
+import { useT } from '../lib/i18n.jsx'
 import { mergePdfs } from '../lib/pdfEdit.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
 const MAX_FILE_MB = 75
 const MAX_FILES = 50
+
+const TXT = {
+  ar: {
+    title: 'دمج ملفات PDF',
+    lead: 'ارفع عدة ملفات PDF ورتّبها بالترتيب اللي تحبه، ثم ادمجها في ملف واحد.',
+    badType: 'صيغة غير مدعومة. يُسمح فقط بملفات PDF.',
+    tooBig: (name) => `حجم الملف "${name}" أكبر من ${MAX_FILE_MB}MB.`,
+    hint: `PDF فقط — حتى ${MAX_FILE_MB}MB لكل ملف، وحتى ${MAX_FILES} ملف`,
+    failed: 'تعذّر دمج الملفات. تأكد أنها ملفات PDF صالحة.',
+    loading: 'جارٍ الدمج...',
+    button: (n) => `دمج ${n || ''} ملفات وتنزيل`,
+    addOneMore: 'أضف ملف واحد على الأقل إضافي للدمج.'
+  },
+  en: {
+    title: 'Merge PDF files',
+    lead: 'Upload several PDF files, arrange them in the order you want, then merge them into one.',
+    badType: 'Unsupported format. Only PDF files are allowed.',
+    tooBig: (name) => `File "${name}" is larger than ${MAX_FILE_MB}MB.`,
+    hint: `PDF only — up to ${MAX_FILE_MB}MB per file, up to ${MAX_FILES} files`,
+    failed: 'Could not merge the files. Make sure they are valid PDFs.',
+    loading: 'Merging...',
+    button: (n) => `Merge ${n || ''} files and download`,
+    addOneMore: 'Add at least one more file to merge.'
+  }
+}
 
 const seo = {
   about: {
@@ -30,6 +56,7 @@ const seo = {
 }
 
 export default function MergePdf() {
+  const t = useT(TXT)
   const [files, setFiles] = useState([]) // { id, file }
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -39,11 +66,11 @@ export default function MergePdf() {
     const valid = []
     for (const file of picked) {
       if (file.type !== 'application/pdf') {
-        setError('صيغة غير مدعومة. يُسمح فقط بملفات PDF.')
+        setError(t.badType)
         continue
       }
       if (file.size > MAX_FILE_MB * 1024 * 1024) {
-        setError(`حجم الملف "${file.name}" أكبر من ${MAX_FILE_MB}MB.`)
+        setError(t.tooBig(file.name))
         continue
       }
       valid.push(file)
@@ -77,7 +104,7 @@ export default function MergePdf() {
       downloadBlob(blob, 'nasser-pdf-merged.pdf')
     } catch (err) {
       console.error(err)
-      setError('تعذّر دمج الملفات. تأكد أنها ملفات PDF صالحة.')
+      setError(t.failed)
     } finally {
       setLoading(false)
     }
@@ -85,8 +112,8 @@ export default function MergePdf() {
 
   return (
     <div className="tool-page">
-      <h1>دمج ملفات PDF</h1>
-      <p className="lead">ارفع عدة ملفات PDF ورتّبها بالترتيب اللي تحبه، ثم ادمجها في ملف واحد.</p>
+      <h1>{t.title}</h1>
+      <p className="lead">{t.lead}</p>
 
       {error && <div className="alert alert-error">{error}</div>}
 
@@ -95,7 +122,7 @@ export default function MergePdf() {
           accept="application/pdf"
           multiple
           onFiles={addFiles}
-          hint={`PDF فقط — حتى ${MAX_FILE_MB}MB لكل ملف، وحتى ${MAX_FILES} ملف`}
+          hint={t.hint}
         />
 
         {files.length > 0 && (
@@ -116,9 +143,9 @@ export default function MergePdf() {
 
       <button className="btn" disabled={files.length < 2 || loading} onClick={handleMerge}>
         {loading && <span className="spinner" />}
-        {loading ? 'جارٍ الدمج...' : `دمج ${files.length || ''} ملفات وتنزيل`}
+        {loading ? t.loading : t.button(files.length)}
       </button>
-      {files.length === 1 && <p className="hint" style={{ marginTop: 10 }}>أضف ملف واحد على الأقل إضافي للدمج.</p>}
+      {files.length === 1 && <p className="hint" style={{ marginTop: 10 }}>{t.addOneMore}</p>}
 
       <SeoContent {...seo} />
     </div>

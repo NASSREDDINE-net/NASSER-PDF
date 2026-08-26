@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
 import SeoContent from '../components/SeoContent.jsx'
+import { useT } from '../lib/i18n.jsx'
 import { loadPdfForRendering, renderPageToImageBlob } from '../lib/pdfRender.js'
 import { recognizeImages } from '../lib/ocr.js'
 import { downloadBlob } from '../lib/imagePdf.js'
@@ -29,15 +30,62 @@ const seo = {
     { q: 'هل تتم المعالجة على جهازي أم على خادم خارجي؟', a: 'كل المعالجة تتم بالكامل داخل متصفحك، ولا يتم رفع أي صورة أو ملف لأي خادم.' }
   ]
 }
-const LANGS = [
-  { id: 'ara', label: 'العربية' },
-  { id: 'eng', label: 'الإنجليزية' },
-  { id: 'ara+eng', label: 'عربي + إنجليزي' }
-]
+
+const TXT = {
+  ar: {
+    title: 'استخراج نص من صورة (OCR)',
+    lead: 'حوّل نص داخل صورة أو ملف PDF ممسوح ضوئياً (صور بدون طبقة نص) إلى نص قابل للنسخ. يعمل بالكامل داخل متصفحك.',
+    badType: 'صيغة غير مدعومة. يُسمح فقط بـ PDF أو PNG أو JPG.',
+    mixError: 'ارفع إما ملف PDF واحد، أو صورة/أكثر — مو مزيج من الاثنين.',
+    onePdfOnly: 'ارفع ملف PDF واحد فقط في كل مرة.',
+    tooBig: (name) => `حجم الملف "${name}" أكبر من ${MAX_FILE_MB}MB.`,
+    noText: 'لم يُعثر على نص في الملف.',
+    recognizeFailed: 'تعذّرت عملية التعرف الضوئي على النص. حاول بملف أوضح أو أصغر.',
+    copyFailed: 'تعذّر النسخ التلقائي. حدد النص وانسخه يدوياً.',
+    hint: `PDF أو PNG أو JPG — حتى ${MAX_FILE_MB}MB لكل ملف`,
+    langLabel: 'لغة النص',
+    langs: [
+      { id: 'ara', label: 'العربية' },
+      { id: 'eng', label: 'الإنجليزية' },
+      { id: 'ara+eng', label: 'عربي + إنجليزي' }
+    ],
+    progress: (a, b) => `جارٍ المعالجة (${a}/${b})...`,
+    preparing: 'جارٍ التحضير...',
+    button: 'استخراج النص',
+    download: 'تنزيل كملف .txt',
+    copied: 'تم النسخ ✓',
+    copy: 'نسخ النص'
+  },
+  en: {
+    title: 'OCR (Image to Text)',
+    lead: 'Turn text inside an image or scanned PDF (images with no real text layer) into copyable text. Runs entirely in your browser.',
+    badType: 'Unsupported format. Only PDF, PNG, or JPG allowed.',
+    mixError: 'Upload either one PDF file, or one or more images — not a mix of both.',
+    onePdfOnly: 'Upload only one PDF file at a time.',
+    tooBig: (name) => `File "${name}" is larger than ${MAX_FILE_MB}MB.`,
+    noText: 'No text was found in the file.',
+    recognizeFailed: 'Text recognition failed. Try a clearer or smaller file.',
+    copyFailed: 'Automatic copy failed. Select the text and copy it manually.',
+    hint: `PDF, PNG, or JPG — up to ${MAX_FILE_MB}MB per file`,
+    langLabel: 'Text language',
+    langs: [
+      { id: 'ara', label: 'Arabic' },
+      { id: 'eng', label: 'English' },
+      { id: 'ara+eng', label: 'Arabic + English' }
+    ],
+    progress: (a, b) => `Processing (${a}/${b})...`,
+    preparing: 'Preparing...',
+    button: 'Extract text',
+    download: 'Download as .txt',
+    copied: 'Copied ✓',
+    copy: 'Copy text'
+  }
+}
 
 export default function OcrTool() {
+  const t = useT(TXT)
   const [files, setFiles] = useState([])
-  const [lang, setLang] = useState('ara')
+  const [ocrLang, setOcrLang] = useState('ara')
   const [text, setText] = useState('')
   const [progress, setProgress] = useState(null)
   const [copied, setCopied] = useState(false)
@@ -52,20 +100,20 @@ export default function OcrTool() {
     const invalid = picked.some((f) => f.type !== 'application/pdf' && f.type !== 'image/png' && f.type !== 'image/jpeg')
 
     if (invalid) {
-      setError('صيغة غير مدعومة. يُسمح فقط بـ PDF أو PNG أو JPG.')
+      setError(t.badType)
       return
     }
     if (hasPdf && hasImage) {
-      setError('ارفع إما ملف PDF واحد، أو صورة/أكثر — مو مزيج من الاثنين.')
+      setError(t.mixError)
       return
     }
     if (hasPdf && picked.length > 1) {
-      setError('ارفع ملف PDF واحد فقط في كل مرة.')
+      setError(t.onePdfOnly)
       return
     }
     for (const f of picked) {
       if (f.size > MAX_FILE_MB * 1024 * 1024) {
-        setError(`حجم الملف "${f.name}" أكبر من ${MAX_FILE_MB}MB.`)
+        setError(t.tooBig(f.name))
         return
       }
     }
@@ -89,12 +137,12 @@ export default function OcrTool() {
         }
       }
 
-      const results = await recognizeImages(images, lang, (i, total) => setProgress({ current: i + 1, total }))
-      const joined = results.map((t, i) => (results.length > 1 ? `--- ${i + 1} ---\n${t}` : t)).join('\n\n')
-      setText(joined.trim() || 'لم يُعثر على نص في الملف.')
+      const results = await recognizeImages(images, ocrLang, (i, total) => setProgress({ current: i + 1, total }))
+      const joined = results.map((r, i) => (results.length > 1 ? `--- ${i + 1} ---\n${r}` : r)).join('\n\n')
+      setText(joined.trim() || t.noText)
     } catch (err) {
       console.error(err)
-      setError('تعذّرت عملية التعرف الضوئي على النص. حاول بملف أوضح أو أصغر.')
+      setError(t.recognizeFailed)
     } finally {
       setLoading(false)
       setProgress(null)
@@ -107,7 +155,7 @@ export default function OcrTool() {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
-      setError('تعذّر النسخ التلقائي. حدد النص وانسخه يدوياً.')
+      setError(t.copyFailed)
     }
   }
 
@@ -117,10 +165,8 @@ export default function OcrTool() {
 
   return (
     <div className="tool-page">
-      <h1>استخراج نص من صورة (OCR)</h1>
-      <p className="lead">
-        حوّل نص داخل صورة أو ملف PDF ممسوح ضوئياً (صور بدون طبقة نص) إلى نص قابل للنسخ. يعمل بالكامل داخل متصفحك.
-      </p>
+      <h1>{t.title}</h1>
+      <p className="lead">{t.lead}</p>
 
       {error && <div className="alert alert-error">{error}</div>}
 
@@ -129,7 +175,7 @@ export default function OcrTool() {
           accept="image/png,image/jpeg,application/pdf"
           multiple
           onFiles={handleFiles}
-          hint={`PDF أو PNG أو JPG — حتى ${MAX_FILE_MB}MB لكل ملف`}
+          hint={t.hint}
         />
         {files.length > 0 && (
           <div className="file-list">
@@ -144,11 +190,11 @@ export default function OcrTool() {
 
       <div className="card">
         <div className="field">
-          <label>لغة النص</label>
+          <label>{t.langLabel}</label>
           <div className="radio-group">
-            {LANGS.map((l) => (
+            {t.langs.map((l) => (
               <label key={l.id}>
-                <input type="radio" checked={lang === l.id} onChange={() => setLang(l.id)} /> {l.label}
+                <input type="radio" checked={ocrLang === l.id} onChange={() => setOcrLang(l.id)} /> {l.label}
               </label>
             ))}
           </div>
@@ -159,9 +205,9 @@ export default function OcrTool() {
         {loading && <span className="spinner" />}
         {loading
           ? progress
-            ? `جارٍ المعالجة (${progress.current}/${progress.total})...`
-            : 'جارٍ التحضير...'
-          : 'استخراج النص'}
+            ? t.progress(progress.current, progress.total)
+            : t.preparing
+          : t.button}
       </button>
 
       {text && !loading && (
@@ -173,8 +219,8 @@ export default function OcrTool() {
             style={{ width: '100%', fontFamily: 'monospace', fontSize: '0.85rem' }}
           />
           <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
-            <button className="btn" onClick={handleDownload}>تنزيل كملف .txt</button>
-            <button className="btn btn-secondary" onClick={handleCopy}>{copied ? 'تم النسخ ✓' : 'نسخ النص'}</button>
+            <button className="btn" onClick={handleDownload}>{t.download}</button>
+            <button className="btn btn-secondary" onClick={handleCopy}>{copied ? t.copied : t.copy}</button>
           </div>
         </div>
       )}

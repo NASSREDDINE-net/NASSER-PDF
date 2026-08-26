@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
 import SeoContent from '../components/SeoContent.jsx'
+import { useT } from '../lib/i18n.jsx'
 import { watermarkPdf } from '../lib/pdfEdit.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
@@ -28,7 +29,43 @@ const seo = {
   ]
 }
 
+const TXT = {
+  ar: {
+    title: 'إضافة علامة مائية',
+    lead: 'أضف نص علامة مائية فوق كل صفحات ملف PDF.',
+    badType: 'صيغة غير مدعومة. يُسمح فقط بملفات PDF.',
+    tooBig: `حجم الملف أكبر من ${MAX_FILE_MB}MB.`,
+    applyFailed: 'تعذّر إضافة العلامة المائية. تأكد أن الملف PDF صالح.',
+    hint: `PDF فقط — حتى ${MAX_FILE_MB}MB`,
+    textLabel: 'نص العلامة المائية',
+    colorLabel: 'اللون',
+    colors: [['gray', 'رمادي'], ['red', 'أحمر'], ['blue', 'أزرق']],
+    opacity: (v) => `الشفافية: ${v}%`,
+    fontSize: (v) => `حجم الخط: ${v}`,
+    rotation: (v) => `زاوية الدوران: ${v}°`,
+    loading: 'جارٍ الإضافة...',
+    button: 'إضافة العلامة المائية وتنزيل'
+  },
+  en: {
+    title: 'Add a watermark',
+    lead: 'Add a text watermark across every page of a PDF file.',
+    badType: 'Unsupported format. Only PDF files are allowed.',
+    tooBig: `File is larger than ${MAX_FILE_MB}MB.`,
+    applyFailed: 'Could not add the watermark. Make sure the PDF file is valid.',
+    hint: `PDF only — up to ${MAX_FILE_MB}MB`,
+    textLabel: 'Watermark text',
+    colorLabel: 'Color',
+    colors: [['gray', 'Gray'], ['red', 'Red'], ['blue', 'Blue']],
+    opacity: (v) => `Opacity: ${v}%`,
+    fontSize: (v) => `Font size: ${v}`,
+    rotation: (v) => `Rotation angle: ${v}°`,
+    loading: 'Adding...',
+    button: 'Add watermark and download'
+  }
+}
+
 export default function WatermarkPdf() {
+  const t = useT(TXT)
   const [file, setFile] = useState(null)
   const [text, setText] = useState('CONFIDENTIAL')
   const [opacity, setOpacity] = useState(0.3)
@@ -42,11 +79,11 @@ export default function WatermarkPdf() {
     const picked = files[0]
     setError('')
     if (picked.type !== 'application/pdf') {
-      setError('صيغة غير مدعومة. يُسمح فقط بملفات PDF.')
+      setError(t.badType)
       return
     }
     if (picked.size > MAX_FILE_MB * 1024 * 1024) {
-      setError(`حجم الملف أكبر من ${MAX_FILE_MB}MB.`)
+      setError(t.tooBig)
       return
     }
     setFile(picked)
@@ -67,7 +104,7 @@ export default function WatermarkPdf() {
       downloadBlob(blob, 'nasser-pdf-watermarked.pdf')
     } catch (err) {
       console.error(err)
-      setError('تعذّر إضافة العلامة المائية. تأكد أن الملف PDF صالح.')
+      setError(t.applyFailed)
     } finally {
       setLoading(false)
     }
@@ -75,13 +112,13 @@ export default function WatermarkPdf() {
 
   return (
     <div className="tool-page">
-      <h1>إضافة علامة مائية</h1>
-      <p className="lead">أضف نص علامة مائية فوق كل صفحات ملف PDF.</p>
+      <h1>{t.title}</h1>
+      <p className="lead">{t.lead}</p>
 
       {error && <div className="alert alert-error">{error}</div>}
 
       <div className="card">
-        <FileDrop accept="application/pdf" onFiles={handleFiles} hint={`PDF فقط — حتى ${MAX_FILE_MB}MB`} />
+        <FileDrop accept="application/pdf" onFiles={handleFiles} hint={t.hint} />
         {file && (
           <div className="file-list">
             <div className="file-row">
@@ -94,18 +131,14 @@ export default function WatermarkPdf() {
 
       <div className="card">
         <div className="field">
-          <label>نص العلامة المائية</label>
+          <label>{t.textLabel}</label>
           <input type="text" value={text} onChange={(e) => setText(e.target.value)} />
         </div>
 
         <div className="field">
-          <label>اللون</label>
+          <label>{t.colorLabel}</label>
           <div className="radio-group">
-            {[
-              ['gray', 'رمادي'],
-              ['red', 'أحمر'],
-              ['blue', 'أزرق']
-            ].map(([value, label]) => (
+            {t.colors.map(([value, label]) => (
               <label key={value}>
                 <input type="radio" checked={color === value} onChange={() => setColor(value)} /> {label}
               </label>
@@ -114,24 +147,24 @@ export default function WatermarkPdf() {
         </div>
 
         <div className="field">
-          <label>الشفافية: {Math.round(opacity * 100)}%</label>
+          <label>{t.opacity(Math.round(opacity * 100))}</label>
           <input type="range" min="0.1" max="1" step="0.05" value={opacity} onChange={(e) => setOpacity(e.target.value)} style={{ width: '100%' }} />
         </div>
 
         <div className="field">
-          <label>حجم الخط: {fontSize}</label>
+          <label>{t.fontSize(fontSize)}</label>
           <input type="range" min="16" max="100" step="2" value={fontSize} onChange={(e) => setFontSize(e.target.value)} style={{ width: '100%' }} />
         </div>
 
         <div className="field">
-          <label>زاوية الدوران: {rotationDeg}°</label>
+          <label>{t.rotation(rotationDeg)}</label>
           <input type="range" min="-90" max="90" step="5" value={rotationDeg} onChange={(e) => setRotationDeg(e.target.value)} style={{ width: '100%' }} />
         </div>
       </div>
 
       <button className="btn" disabled={!file || !text.trim() || loading} onClick={handleApply}>
         {loading && <span className="spinner" />}
-        {loading ? 'جارٍ الإضافة...' : 'إضافة العلامة المائية وتنزيل'}
+        {loading ? t.loading : t.button}
       </button>
 
       <SeoContent {...seo} />

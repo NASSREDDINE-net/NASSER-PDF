@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
 import SeoContent from '../components/SeoContent.jsx'
+import { useT } from '../lib/i18n.jsx'
 import { imagesToPdf, downloadBlob } from '../lib/imagePdf.js'
 
 const MAX_FILE_MB = 50
@@ -29,7 +30,51 @@ const seo = {
   ]
 }
 
+const TXT = {
+  ar: {
+    title: 'تحويل الصور إلى PDF',
+    lead: 'اجمع عدة صور PNG أو JPG في ملف PDF واحد، مع إمكانية ترتيبها والتحكم في التنسيق.',
+    badType: 'صيغة غير مدعومة. يُسمح فقط بـ PNG وJPG/JPEG.',
+    tooBig: (name) => `حجم الملف "${name}" أكبر من ${MAX_FILE_MB}MB.`,
+    hint: `PNG أو JPG — حتى ${MAX_FILE_MB}MB لكل صورة، وحتى ${MAX_FILES} صورة`,
+    up: 'تحريك لأعلى',
+    down: 'تحريك لأسفل',
+    delete: 'حذف',
+    pageSizeLabel: 'حجم الصفحة',
+    fitToImage: 'حسب حجم الصورة',
+    orientationLabel: 'الاتجاه',
+    portrait: 'عمودي',
+    landscape: 'أفقي',
+    margin: (v) => `الهوامش (مم): ${v}`,
+    quality: (v) => `جودة الصورة: ${v}%`,
+    createFailed: 'حدث خطأ أثناء إنشاء ملف PDF. حاول مجدداً.',
+    loading: 'جارٍ الإنشاء...',
+    button: (n) => `تحويل ${n || ''} إلى PDF وتنزيل`
+  },
+  en: {
+    title: 'Convert Images to PDF',
+    lead: 'Combine several PNG or JPG images into one PDF, with reordering and formatting controls.',
+    badType: 'Unsupported format. Only PNG and JPG/JPEG are allowed.',
+    tooBig: (name) => `File "${name}" is larger than ${MAX_FILE_MB}MB.`,
+    hint: `PNG or JPG — up to ${MAX_FILE_MB}MB per image, up to ${MAX_FILES} images`,
+    up: 'Move up',
+    down: 'Move down',
+    delete: 'Delete',
+    pageSizeLabel: 'Page size',
+    fitToImage: 'Fit to image size',
+    orientationLabel: 'Orientation',
+    portrait: 'Portrait',
+    landscape: 'Landscape',
+    margin: (v) => `Margins (mm): ${v}`,
+    quality: (v) => `Image quality: ${v}%`,
+    createFailed: 'An error occurred while creating the PDF. Please try again.',
+    loading: 'Creating...',
+    button: (n) => `Convert ${n || ''} to PDF and download`
+  }
+}
+
 export default function ImageToPdf() {
+  const t = useT(TXT)
   const [images, setImages] = useState([]) // { id, file, previewUrl }
   const [pageSize, setPageSize] = useState('a4')
   const [orientation, setOrientation] = useState('portrait')
@@ -43,11 +88,11 @@ export default function ImageToPdf() {
     const valid = []
     for (const file of files) {
       if (!ACCEPTED.includes(file.type)) {
-        setError('صيغة غير مدعومة. يُسمح فقط بـ PNG وJPG/JPEG.')
+        setError(t.badType)
         continue
       }
       if (file.size > MAX_FILE_MB * 1024 * 1024) {
-        setError(`حجم الملف "${file.name}" أكبر من ${MAX_FILE_MB}MB.`)
+        setError(t.tooBig(file.name))
         continue
       }
       valid.push(file)
@@ -91,7 +136,7 @@ export default function ImageToPdf() {
       downloadBlob(blob, 'nasser-pdf-images.pdf')
     } catch (err) {
       console.error(err)
-      setError('حدث خطأ أثناء إنشاء ملف PDF. حاول مجدداً.')
+      setError(t.createFailed)
     } finally {
       setLoading(false)
     }
@@ -99,8 +144,8 @@ export default function ImageToPdf() {
 
   return (
     <div className="tool-page">
-      <h1>تحويل الصور إلى PDF</h1>
-      <p className="lead">اجمع عدة صور PNG أو JPG في ملف PDF واحد، مع إمكانية ترتيبها والتحكم في التنسيق.</p>
+      <h1>{t.title}</h1>
+      <p className="lead">{t.lead}</p>
 
       {error && <div className="alert alert-error">{error}</div>}
 
@@ -109,7 +154,7 @@ export default function ImageToPdf() {
           accept="image/png,image/jpeg"
           multiple
           onFiles={addFiles}
-          hint={`PNG أو JPG — حتى ${MAX_FILE_MB}MB لكل صورة، وحتى ${MAX_FILES} صورة`}
+          hint={t.hint}
         />
 
         {images.length > 0 && (
@@ -121,9 +166,9 @@ export default function ImageToPdf() {
                   {img.file.name}
                 </span>
                 <span style={{ display: 'flex', gap: 4 }}>
-                  <button type="button" onClick={() => move(index, -1)} title="تحريك لأعلى" disabled={index === 0}>↑</button>
-                  <button type="button" onClick={() => move(index, 1)} title="تحريك لأسفل" disabled={index === images.length - 1}>↓</button>
-                  <button type="button" onClick={() => removeImage(img.id)} title="حذف">✕</button>
+                  <button type="button" onClick={() => move(index, -1)} title={t.up} disabled={index === 0}>↑</button>
+                  <button type="button" onClick={() => move(index, 1)} title={t.down} disabled={index === images.length - 1}>↓</button>
+                  <button type="button" onClick={() => removeImage(img.id)} title={t.delete}>✕</button>
                 </span>
               </div>
             ))}
@@ -133,45 +178,45 @@ export default function ImageToPdf() {
 
       <div className="card">
         <div className="field">
-          <label>حجم الصفحة</label>
+          <label>{t.pageSizeLabel}</label>
           <div className="radio-group">
             <label>
               <input type="radio" checked={pageSize === 'a4'} onChange={() => setPageSize('a4')} /> A4
             </label>
             <label>
-              <input type="radio" checked={pageSize === 'fit'} onChange={() => setPageSize('fit')} /> حسب حجم الصورة
+              <input type="radio" checked={pageSize === 'fit'} onChange={() => setPageSize('fit')} /> {t.fitToImage}
             </label>
           </div>
         </div>
 
         {pageSize === 'a4' && (
           <div className="field">
-            <label>الاتجاه</label>
+            <label>{t.orientationLabel}</label>
             <div className="radio-group">
               <label>
-                <input type="radio" checked={orientation === 'portrait'} onChange={() => setOrientation('portrait')} /> عمودي
+                <input type="radio" checked={orientation === 'portrait'} onChange={() => setOrientation('portrait')} /> {t.portrait}
               </label>
               <label>
-                <input type="radio" checked={orientation === 'landscape'} onChange={() => setOrientation('landscape')} /> أفقي
+                <input type="radio" checked={orientation === 'landscape'} onChange={() => setOrientation('landscape')} /> {t.landscape}
               </label>
             </div>
           </div>
         )}
 
         <div className="field">
-          <label>الهوامش (مم): {margin}</label>
+          <label>{t.margin(margin)}</label>
           <input type="range" min="0" max="30" step="1" value={margin} onChange={(e) => setMargin(e.target.value)} style={{ width: '100%' }} />
         </div>
 
         <div className="field">
-          <label>جودة الصورة: {Math.round(quality * 100)}%</label>
+          <label>{t.quality(Math.round(quality * 100))}</label>
           <input type="range" min="0.4" max="1" step="0.05" value={quality} onChange={(e) => setQuality(e.target.value)} style={{ width: '100%' }} />
         </div>
       </div>
 
       <button className="btn" disabled={images.length === 0 || loading} onClick={handleConvert}>
         {loading && <span className="spinner" />}
-        {loading ? 'جارٍ الإنشاء...' : `تحويل ${images.length || ''} إلى PDF وتنزيل`}
+        {loading ? t.loading : t.button(images.length)}
       </button>
 
       <SeoContent {...seo} />

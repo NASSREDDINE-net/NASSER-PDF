@@ -26,11 +26,14 @@ const seo = {
 export default function WordToPdf() {
   return (
     <OfficeToPdf
-      title="تحويل Word إلى PDF"
-      lead="ارفع ملف DOC أو DOCX وسيتم تحويله إلى PDF بتنسيق مطابق للأصل."
+      title={{ ar: 'تحويل Word إلى PDF', en: 'Word to PDF' }}
+      lead={{
+        ar: 'ارفع ملف DOC أو DOCX وسيتم تحويله إلى PDF بتنسيق مطابق للأصل.',
+        en: 'Upload a DOC or DOCX file and it will be converted to PDF with matching formatting.'
+      }}
       accept=".doc,.docx"
       extensions={['doc', 'docx']}
-      hint="DOC أو DOCX — حتى 100MB"
+      hint={{ ar: 'DOC أو DOCX — حتى 100MB', en: 'DOC or DOCX — up to 100MB' }}
       seo={seo}
     />
   )

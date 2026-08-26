@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import SeoContent from '../components/SeoContent.jsx'
+import { useT } from '../lib/i18n.jsx'
 import { buildPayload, generatePng, generateSvg } from '../lib/qr.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
@@ -25,15 +26,65 @@ const seo = {
   ]
 }
 
-const TYPES = [
-  { id: 'url', label: 'رابط' },
-  { id: 'text', label: 'نص' },
-  { id: 'email', label: 'بريد إلكتروني' },
-  { id: 'phone', label: 'رقم هاتف' },
-  { id: 'wifi', label: 'شبكة واي فاي' }
-]
+const TXT = {
+  ar: {
+    title: 'إنشاء رمز QR',
+    lead: 'اختر نوع البيانات، املأ التفاصيل، وحمّل الرمز بصيغة PNG أو SVG.',
+    genFailed: 'تعذّر إنشاء رمز QR بهذه البيانات.',
+    svgFailed: 'تعذّر إنشاء ملف SVG.',
+    dataTypeLabel: 'نوع البيانات',
+    types: [
+      { id: 'url', label: 'رابط' },
+      { id: 'text', label: 'نص' },
+      { id: 'email', label: 'بريد إلكتروني' },
+      { id: 'phone', label: 'رقم هاتف' },
+      { id: 'wifi', label: 'شبكة واي فاي' }
+    ],
+    urlLabel: 'الرابط',
+    textLabel: 'النص',
+    emailLabel: 'البريد الإلكتروني',
+    subjectLabel: 'الموضوع (اختياري)',
+    bodyLabel: 'نص الرسالة (اختياري)',
+    phoneLabel: 'رقم الهاتف',
+    ssidLabel: 'اسم الشبكة (SSID)',
+    wifiPasswordLabel: 'كلمة المرور',
+    encryptionLabel: 'نوع التشفير',
+    size: (v) => `الحجم: ${v}px`,
+    qrAlt: 'رمز QR',
+    downloadPng: 'تنزيل PNG',
+    downloadSvg: 'تنزيل SVG'
+  },
+  en: {
+    title: 'Generate QR Code',
+    lead: 'Choose the data type, fill in the details, and download the code as PNG or SVG.',
+    genFailed: 'Could not generate a QR code from this data.',
+    svgFailed: 'Could not generate the SVG file.',
+    dataTypeLabel: 'Data type',
+    types: [
+      { id: 'url', label: 'URL' },
+      { id: 'text', label: 'Text' },
+      { id: 'email', label: 'Email' },
+      { id: 'phone', label: 'Phone number' },
+      { id: 'wifi', label: 'Wi-Fi network' }
+    ],
+    urlLabel: 'URL',
+    textLabel: 'Text',
+    emailLabel: 'Email',
+    subjectLabel: 'Subject (optional)',
+    bodyLabel: 'Message body (optional)',
+    phoneLabel: 'Phone number',
+    ssidLabel: 'Network name (SSID)',
+    wifiPasswordLabel: 'Password',
+    encryptionLabel: 'Encryption type',
+    size: (v) => `Size: ${v}px`,
+    qrAlt: 'QR code',
+    downloadPng: 'Download PNG',
+    downloadSvg: 'Download SVG'
+  }
+}
 
 export default function QrCode() {
+  const t = useT(TXT)
   const [type, setType] = useState('url')
   const [fields, setFields] = useState({})
   const [size, setSize] = useState(300)
@@ -55,7 +106,7 @@ export default function QrCode() {
           setPngUrl(url)
           setError('')
         })
-        .catch(() => setError('تعذّر إنشاء رمز QR بهذه البيانات.'))
+        .catch(() => setError(t.genFailed))
     }, 200)
     return () => clearTimeout(timer)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,32 +127,32 @@ export default function QrCode() {
       const svg = await generateSvg(payload, size)
       downloadBlob(new Blob([svg], { type: 'image/svg+xml' }), 'nasser-pdf-qrcode.svg')
     } catch {
-      setError('تعذّر إنشاء ملف SVG.')
+      setError(t.svgFailed)
     }
   }
 
   return (
     <div className="tool-page">
-      <h1>إنشاء رمز QR</h1>
-      <p className="lead">اختر نوع البيانات، املأ التفاصيل، وحمّل الرمز بصيغة PNG أو SVG.</p>
+      <h1>{t.title}</h1>
+      <p className="lead">{t.lead}</p>
 
       {error && <div className="alert alert-error">{error}</div>}
 
       <div className="card">
         <div className="field">
-          <label>نوع البيانات</label>
+          <label>{t.dataTypeLabel}</label>
           <div className="radio-group">
-            {TYPES.map((t) => (
-              <label key={t.id}>
+            {t.types.map((tp) => (
+              <label key={tp.id}>
                 <input
                   type="radio"
-                  checked={type === t.id}
+                  checked={type === tp.id}
                   onChange={() => {
-                    setType(t.id)
+                    setType(tp.id)
                     setFields({})
                   }}
                 />
-                {t.label}
+                {tp.label}
               </label>
             ))}
           </div>
@@ -109,14 +160,14 @@ export default function QrCode() {
 
         {type === 'url' && (
           <div className="field">
-            <label>الرابط</label>
+            <label>{t.urlLabel}</label>
             <input type="text" placeholder="example.com" value={fields.url || ''} onChange={(e) => setField('url', e.target.value)} />
           </div>
         )}
 
         {type === 'text' && (
           <div className="field">
-            <label>النص</label>
+            <label>{t.textLabel}</label>
             <textarea rows={4} value={fields.text || ''} onChange={(e) => setField('text', e.target.value)} />
           </div>
         )}
@@ -124,15 +175,15 @@ export default function QrCode() {
         {type === 'email' && (
           <>
             <div className="field">
-              <label>البريد الإلكتروني</label>
+              <label>{t.emailLabel}</label>
               <input type="email" placeholder="name@example.com" value={fields.email || ''} onChange={(e) => setField('email', e.target.value)} />
             </div>
             <div className="field">
-              <label>الموضوع (اختياري)</label>
+              <label>{t.subjectLabel}</label>
               <input type="text" value={fields.subject || ''} onChange={(e) => setField('subject', e.target.value)} />
             </div>
             <div className="field">
-              <label>نص الرسالة (اختياري)</label>
+              <label>{t.bodyLabel}</label>
               <textarea rows={3} value={fields.body || ''} onChange={(e) => setField('body', e.target.value)} />
             </div>
           </>
@@ -140,7 +191,7 @@ export default function QrCode() {
 
         {type === 'phone' && (
           <div className="field">
-            <label>رقم الهاتف</label>
+            <label>{t.phoneLabel}</label>
             <input type="tel" placeholder="+212600000000" value={fields.phone || ''} onChange={(e) => setField('phone', e.target.value)} />
           </div>
         )}
@@ -148,15 +199,15 @@ export default function QrCode() {
         {type === 'wifi' && (
           <>
             <div className="field">
-              <label>اسم الشبكة (SSID)</label>
+              <label>{t.ssidLabel}</label>
               <input type="text" value={fields.ssid || ''} onChange={(e) => setField('ssid', e.target.value)} />
             </div>
             <div className="field">
-              <label>كلمة المرور</label>
+              <label>{t.wifiPasswordLabel}</label>
               <input type="text" value={fields.password || ''} onChange={(e) => setField('password', e.target.value)} />
             </div>
             <div className="field">
-              <label>نوع التشفير</label>
+              <label>{t.encryptionLabel}</label>
               <div className="radio-group">
                 {['WPA', 'WEP', 'nopass'].map((enc) => (
                   <label key={enc}>
@@ -174,17 +225,17 @@ export default function QrCode() {
         )}
 
         <div className="field">
-          <label>الحجم: {size}px</label>
+          <label>{t.size(size)}</label>
           <input type="range" min="150" max="800" step="10" value={size} onChange={(e) => setSize(Number(e.target.value))} style={{ width: '100%' }} />
         </div>
       </div>
 
       {pngUrl && (
         <div className="card" style={{ textAlign: 'center' }}>
-          <img src={pngUrl} alt="رمز QR" style={{ maxWidth: '100%', borderRadius: 8 }} />
+          <img src={pngUrl} alt={t.qrAlt} style={{ maxWidth: '100%', borderRadius: 8 }} />
           <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginTop: 16 }}>
-            <button className="btn" onClick={handleDownloadPng}>تنزيل PNG</button>
-            <button className="btn btn-secondary" onClick={handleDownloadSvg}>تنزيل SVG</button>
+            <button className="btn" onClick={handleDownloadPng}>{t.downloadPng}</button>
+            <button className="btn btn-secondary" onClick={handleDownloadSvg}>{t.downloadSvg}</button>
           </div>
         </div>
       )}

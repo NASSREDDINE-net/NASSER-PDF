@@ -2,10 +2,48 @@ import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
 import GoogleSignInGate from '../components/GoogleSignInGate.jsx'
 import SeoContent from '../components/SeoContent.jsx'
+import { useT } from '../lib/i18n.jsx'
 import { compressPdf, ApiError } from '../lib/api.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
 const MAX_FILE_MB = 100
+
+const TXT = {
+  ar: {
+    title: 'ضغط PDF',
+    lead: 'قلّل حجم ملف PDF مع الحفاظ على جودة معقولة حسب الإعداد اللي تختاره.',
+    badType: 'صيغة غير مدعومة. يُسمح فقط بملفات PDF.',
+    tooBig: `حجم الملف أكبر من ${MAX_FILE_MB}MB.`,
+    unexpected: 'حدث خطأ غير متوقع أثناء الضغط.',
+    success: 'تم الضغط بنجاح، بدأ تنزيل الملف.',
+    hint: `PDF فقط — حتى ${MAX_FILE_MB}MB`,
+    levelLabel: 'مستوى الضغط',
+    profiles: [
+      { id: 'print', label: 'جودة عالية (ضغط أقل)' },
+      { id: 'web', label: 'متوازن (موصى به)' },
+      { id: 'archive', label: 'أصغر حجم (جودة أقل)' }
+    ],
+    loading: 'جارٍ الضغط...',
+    button: 'ضغط الملف وتنزيل'
+  },
+  en: {
+    title: 'Compress PDF',
+    lead: 'Shrink a PDF file while keeping reasonable quality, based on the level you choose.',
+    badType: 'Unsupported format. Only PDF files are allowed.',
+    tooBig: `File is larger than ${MAX_FILE_MB}MB.`,
+    unexpected: 'An unexpected error occurred while compressing.',
+    success: 'Compressed successfully — your download has started.',
+    hint: `PDF only — up to ${MAX_FILE_MB}MB`,
+    levelLabel: 'Compression level',
+    profiles: [
+      { id: 'print', label: 'High quality (less compression)' },
+      { id: 'web', label: 'Balanced (recommended)' },
+      { id: 'archive', label: 'Smallest size (lower quality)' }
+    ],
+    loading: 'Compressing...',
+    button: 'Compress file and download'
+  }
+}
 
 const seo = {
   about: {
@@ -28,13 +66,8 @@ const seo = {
     { q: 'هل الضغط يؤثر على وضوح النص؟', a: 'النص يبقى واضحاً في كل المستويات؛ الضغط يؤثر بشكل أساسي على جودة الصور المضمّنة في الملف.' }
   ]
 }
-const PROFILES = [
-  { id: 'print', label: 'جودة عالية (ضغط أقل)' },
-  { id: 'web', label: 'متوازن (موصى به)' },
-  { id: 'archive', label: 'أصغر حجم (جودة أقل)' }
-]
-
 export default function CompressPdf() {
+  const t = useT(TXT)
   const [file, setFile] = useState(null)
   const [profile, setProfile] = useState('web')
   const [loading, setLoading] = useState(false)
@@ -46,11 +79,11 @@ export default function CompressPdf() {
     setError('')
     setDone(false)
     if (picked.type !== 'application/pdf') {
-      setError('صيغة غير مدعومة. يُسمح فقط بملفات PDF.')
+      setError(t.badType)
       return
     }
     if (picked.size > MAX_FILE_MB * 1024 * 1024) {
-      setError(`حجم الملف أكبر من ${MAX_FILE_MB}MB.`)
+      setError(t.tooBig)
       return
     }
     setFile(picked)
@@ -67,7 +100,7 @@ export default function CompressPdf() {
       downloadBlob(blob, outName)
       setDone(true)
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'حدث خطأ غير متوقع أثناء الضغط.')
+      setError(err instanceof ApiError ? err.message : t.unexpected)
     } finally {
       setLoading(false)
     }
@@ -75,15 +108,15 @@ export default function CompressPdf() {
 
   return (
     <div className="tool-page">
-      <h1>ضغط PDF</h1>
-      <p className="lead">قلّل حجم ملف PDF مع الحفاظ على جودة معقولة حسب الإعداد اللي تختاره.</p>
+      <h1>{t.title}</h1>
+      <p className="lead">{t.lead}</p>
 
       {error && <div className="alert alert-error">{error}</div>}
-      {done && <div className="alert alert-success">تم الضغط بنجاح، بدأ تنزيل الملف.</div>}
+      {done && <div className="alert alert-success">{t.success}</div>}
 
       <GoogleSignInGate>
         <div className="card">
-          <FileDrop accept="application/pdf" onFiles={handleFiles} hint={`PDF فقط — حتى ${MAX_FILE_MB}MB`} />
+          <FileDrop accept="application/pdf" onFiles={handleFiles} hint={t.hint} />
           {file && (
             <div className="file-list">
               <div className="file-row">
@@ -96,9 +129,9 @@ export default function CompressPdf() {
 
         <div className="card">
           <div className="field">
-            <label>مستوى الضغط</label>
+            <label>{t.levelLabel}</label>
             <div className="radio-group">
-              {PROFILES.map((p) => (
+              {t.profiles.map((p) => (
                 <label key={p.id}>
                   <input type="radio" checked={profile === p.id} onChange={() => setProfile(p.id)} /> {p.label}
                 </label>
@@ -109,7 +142,7 @@ export default function CompressPdf() {
 
         <button className="btn" disabled={!file || loading} onClick={handleCompress}>
           {loading && <span className="spinner" />}
-          {loading ? 'جارٍ الضغط...' : 'ضغط الملف وتنزيل'}
+          {loading ? t.loading : t.button}
         </button>
       </GoogleSignInGate>
 

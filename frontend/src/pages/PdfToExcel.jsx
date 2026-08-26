@@ -26,15 +26,18 @@ const seo = {
 export default function PdfToExcel() {
   return (
     <OfficeToPdf
-      title="تحويل PDF إلى Excel"
-      lead="ارفع ملف PDF وسيتم تحويله إلى جدول بيانات Excel (XLSX)."
+      title={{ ar: 'تحويل PDF إلى Excel', en: 'PDF to Excel' }}
+      lead={{
+        ar: 'ارفع ملف PDF وسيتم تحويله إلى جدول بيانات Excel (XLSX).',
+        en: 'Upload a PDF file and it will be converted to an Excel (XLSX) spreadsheet.'
+      }}
       accept=".pdf"
       extensions={['pdf']}
-      hint="PDF فقط — حتى 100MB"
+      hint={{ ar: 'PDF فقط — حتى 100MB', en: 'PDF only — up to 100MB' }}
       convertFn={(file) => convertPdfTo(file, 'xlsx')}
       outputExtension="xlsx"
-      buttonLabel="تحويل إلى Excel وتنزيل"
-      loadingLabel="جارٍ التحويل..."
+      buttonLabel={{ ar: 'تحويل إلى Excel وتنزيل', en: 'Convert to Excel and download' }}
+      loadingLabel={{ ar: 'جارٍ التحويل...', en: 'Converting...' }}
       seo={seo}
     />
   )

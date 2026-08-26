@@ -1,8 +1,15 @@
 import { useRef, useState } from 'react'
+import { useT } from '../lib/i18n.jsx'
+
+const TXT = {
+  ar: { prompt: 'اسحب الملف هنا أو اضغط للاختيار' },
+  en: { prompt: 'Drag a file here or click to choose' }
+}
 
 export default function FileDrop({ accept, multiple = false, onFiles, hint }) {
   const inputRef = useRef(null)
   const [active, setActive] = useState(false)
+  const t = useT(TXT)
 
   const handleFiles = (fileList) => {
     const files = Array.from(fileList || [])
@@ -26,7 +33,7 @@ export default function FileDrop({ accept, multiple = false, onFiles, hint }) {
       role="button"
       tabIndex={0}
     >
-      <p>اسحب الملف هنا أو اضغط للاختيار</p>
+      <p>{t.prompt}</p>
       {hint && <p className="hint">{hint}</p>}
       <input
         ref={inputRef}

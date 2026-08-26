@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
 import SeoContent from '../components/SeoContent.jsx'
+import { useT } from '../lib/i18n.jsx'
 import { loadFormFields, fillForm } from '../lib/pdfForms.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
@@ -28,7 +29,39 @@ const seo = {
   ]
 }
 
+const TXT = {
+  ar: {
+    title: 'تعبئة نماذج PDF',
+    lead: 'ارفع ملف PDF فيه حقول قابلة للتعبئة، عبّئها، ونزّل النسخة المكتملة.',
+    badType: 'صيغة غير مدعومة. يُسمح فقط بملفات PDF.',
+    tooBig: `حجم الملف أكبر من ${MAX_FILE_MB}MB.`,
+    readFailed: 'تعذّر قراءة الملف. تأكد أنه PDF صالح وغير محمي بكلمة مرور.',
+    fillFailed: 'تعذّر تعبئة النموذج. حاول مجدداً.',
+    hint: `PDF فقط — حتى ${MAX_FILE_MB}MB`,
+    noFields: 'لا توجد حقول قابلة للتعبئة في هذا الملف.',
+    enabled: 'مُفعّل',
+    choose: '— اختر —',
+    loading: 'جارٍ التعبئة...',
+    button: 'تعبئة وتنزيل PDF'
+  },
+  en: {
+    title: 'Fill PDF Forms',
+    lead: 'Upload a PDF with fillable fields, fill them in, and download the completed copy.',
+    badType: 'Unsupported format. Only PDF files are allowed.',
+    tooBig: `File is larger than ${MAX_FILE_MB}MB.`,
+    readFailed: 'Could not read the file. Make sure it’s a valid PDF and not password-protected.',
+    fillFailed: 'Could not fill the form. Please try again.',
+    hint: `PDF only — up to ${MAX_FILE_MB}MB`,
+    noFields: 'This file has no fillable fields.',
+    enabled: 'Enabled',
+    choose: '— Choose —',
+    loading: 'Filling...',
+    button: 'Fill and download PDF'
+  }
+}
+
 export default function FillPdfForm() {
+  const t = useT(TXT)
   const [file, setFile] = useState(null)
   const [fields, setFields] = useState(null)
   const [values, setValues] = useState({})
@@ -41,11 +74,11 @@ export default function FillPdfForm() {
     setFields(null)
     setValues({})
     if (picked.type !== 'application/pdf') {
-      setError('صيغة غير مدعومة. يُسمح فقط بملفات PDF.')
+      setError(t.badType)
       return
     }
     if (picked.size > MAX_FILE_MB * 1024 * 1024) {
-      setError(`حجم الملف أكبر من ${MAX_FILE_MB}MB.`)
+      setError(t.tooBig)
       return
     }
     setFile(picked)
@@ -59,7 +92,7 @@ export default function FillPdfForm() {
       setValues(initial)
     } catch (err) {
       console.error(err)
-      setError('تعذّر قراءة الملف. تأكد أنه PDF صالح وغير محمي بكلمة مرور.')
+      setError(t.readFailed)
       setFile(null)
     }
   }
@@ -75,7 +108,7 @@ export default function FillPdfForm() {
       downloadBlob(blob, 'nasser-pdf-filled.pdf')
     } catch (err) {
       console.error(err)
-      setError('تعذّر تعبئة النموذج. حاول مجدداً.')
+      setError(t.fillFailed)
     } finally {
       setLoading(false)
     }
@@ -85,13 +118,13 @@ export default function FillPdfForm() {
 
   return (
     <div className="tool-page">
-      <h1>تعبئة نماذج PDF</h1>
-      <p className="lead">ارفع ملف PDF فيه حقول قابلة للتعبئة، عبّئها، ونزّل النسخة المكتملة.</p>
+      <h1>{t.title}</h1>
+      <p className="lead">{t.lead}</p>
 
       {error && <div className="alert alert-error">{error}</div>}
 
       <div className="card">
-        <FileDrop accept="application/pdf" onFiles={handleFiles} hint={`PDF فقط — حتى ${MAX_FILE_MB}MB`} />
+        <FileDrop accept="application/pdf" onFiles={handleFiles} hint={t.hint} />
         {file && (
           <div className="file-list">
             <div className="file-row">
@@ -103,7 +136,7 @@ export default function FillPdfForm() {
       </div>
 
       {fields && fillableFields.length === 0 && (
-        <div className="alert alert-error">لا توجد حقول قابلة للتعبئة في هذا الملف.</div>
+        <div className="alert alert-error">{t.noFields}</div>
       )}
 
       {fillableFields.length > 0 && (
@@ -121,12 +154,12 @@ export default function FillPdfForm() {
                     checked={!!values[f.name]}
                     onChange={(e) => setFieldValue(f.name, e.target.checked)}
                   />
-                  مُفعّل
+                  {t.enabled}
                 </label>
               )}
               {(f.type === 'dropdown' || f.type === 'radio') && (
                 <select value={values[f.name] || ''} onChange={(e) => setFieldValue(f.name, e.target.value)}>
-                  <option value="">— اختر —</option>
+                  <option value="">{t.choose}</option>
                   {(f.options || []).map((opt) => (
                     <option key={opt} value={opt}>{opt}</option>
                   ))}
@@ -151,7 +184,7 @@ export default function FillPdfForm() {
       {fillableFields.length > 0 && (
         <button className="btn" disabled={loading} onClick={handleFill}>
           {loading && <span className="spinner" />}
-          {loading ? 'جارٍ التعبئة...' : 'تعبئة وتنزيل PDF'}
+          {loading ? t.loading : t.button}
         </button>
       )}
 

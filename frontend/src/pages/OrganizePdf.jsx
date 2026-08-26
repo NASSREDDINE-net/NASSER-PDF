@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
 import SeoContent from '../components/SeoContent.jsx'
+import { useT } from '../lib/i18n.jsx'
 import { getPdfPageCount, organizePdf } from '../lib/pdfEdit.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
@@ -28,7 +29,49 @@ const seo = {
   ]
 }
 
+const TXT = {
+  ar: {
+    title: 'ترتيب صفحات PDF',
+    lead: 'دوّر، احذف، أو أعد ترتيب صفحات ملف PDF واحد.',
+    badType: 'صيغة غير مدعومة. يُسمح فقط بملفات PDF.',
+    tooBig: `حجم الملف أكبر من ${MAX_FILE_MB}MB.`,
+    readFailed: 'تعذّر قراءة الملف. تأكد أنه PDF صالح وغير محمي بكلمة مرور.',
+    applyFailed: 'تعذّر تعديل الملف. حاول مجدداً.',
+    hint: `PDF فقط — حتى ${MAX_FILE_MB}MB`,
+    remaining: (n) => `${n} صفحة متبقية`,
+    page: (n) => `صفحة ${n}`,
+    rotated: (deg) => ` — تدوير ${deg}°`,
+    up: 'تحريك لأعلى',
+    down: 'تحريك لأسفل',
+    rotateLeft: 'تدوير لليسار',
+    rotateRight: 'تدوير لليمين',
+    delete: 'حذف الصفحة',
+    loading: 'جارٍ الحفظ...',
+    button: 'حفظ التعديلات وتنزيل'
+  },
+  en: {
+    title: 'Organize PDF pages',
+    lead: 'Rotate, delete, or reorder the pages of a single PDF file.',
+    badType: 'Unsupported format. Only PDF files are allowed.',
+    tooBig: `File is larger than ${MAX_FILE_MB}MB.`,
+    readFailed: 'Could not read the file. Make sure it’s a valid PDF and not password-protected.',
+    applyFailed: 'Could not modify the file. Please try again.',
+    hint: `PDF only — up to ${MAX_FILE_MB}MB`,
+    remaining: (n) => `${n} pages remaining`,
+    page: (n) => `Page ${n}`,
+    rotated: (deg) => ` — rotated ${deg}°`,
+    up: 'Move up',
+    down: 'Move down',
+    rotateLeft: 'Rotate left',
+    rotateRight: 'Rotate right',
+    delete: 'Delete page',
+    loading: 'Saving...',
+    button: 'Save changes and download'
+  }
+}
+
 export default function OrganizePdf() {
+  const t = useT(TXT)
   const [file, setFile] = useState(null)
   const [pages, setPages] = useState([]) // { id, originalIndex, rotateBy }
   const [loading, setLoading] = useState(false)
@@ -39,11 +82,11 @@ export default function OrganizePdf() {
     setError('')
     setPages([])
     if (picked.type !== 'application/pdf') {
-      setError('صيغة غير مدعومة. يُسمح فقط بملفات PDF.')
+      setError(t.badType)
       return
     }
     if (picked.size > MAX_FILE_MB * 1024 * 1024) {
-      setError(`حجم الملف أكبر من ${MAX_FILE_MB}MB.`)
+      setError(t.tooBig)
       return
     }
     try {
@@ -53,7 +96,7 @@ export default function OrganizePdf() {
         Array.from({ length: count }, (_, i) => ({ id: `p${i}`, originalIndex: i, rotateBy: 0 }))
       )
     } catch {
-      setError('تعذّر قراءة الملف. تأكد أنه PDF صالح وغير محمي بكلمة مرور.')
+      setError(t.readFailed)
     }
   }
 
@@ -84,7 +127,7 @@ export default function OrganizePdf() {
       downloadBlob(blob, 'nasser-pdf-organized.pdf')
     } catch (err) {
       console.error(err)
-      setError('تعذّر تعديل الملف. حاول مجدداً.')
+      setError(t.applyFailed)
     } finally {
       setLoading(false)
     }
@@ -92,14 +135,14 @@ export default function OrganizePdf() {
 
   return (
     <div className="tool-page">
-      <h1>ترتيب صفحات PDF</h1>
-      <p className="lead">دوّر، احذف، أو أعد ترتيب صفحات ملف PDF واحد.</p>
+      <h1>{t.title}</h1>
+      <p className="lead">{t.lead}</p>
 
       {error && <div className="alert alert-error">{error}</div>}
 
       <div className="card">
-        <FileDrop accept="application/pdf" onFiles={handleFiles} hint={`PDF فقط — حتى ${MAX_FILE_MB}MB`} />
-        {file && <p className="hint" style={{ marginTop: 10 }}>{file.name} — {pages.length} صفحة متبقية</p>}
+        <FileDrop accept="application/pdf" onFiles={handleFiles} hint={t.hint} />
+        {file && <p className="hint" style={{ marginTop: 10 }}>{file.name} — {t.remaining(pages.length)}</p>}
       </div>
 
       {pages.length > 0 && (
@@ -108,15 +151,15 @@ export default function OrganizePdf() {
             {pages.map((p, index) => (
               <div className="file-row" key={p.id}>
                 <span>
-                  صفحة {p.originalIndex + 1}
-                  {p.rotateBy ? ` — تدوير ${p.rotateBy}°` : ''}
+                  {t.page(p.originalIndex + 1)}
+                  {p.rotateBy ? t.rotated(p.rotateBy) : ''}
                 </span>
                 <span style={{ display: 'flex', gap: 4 }}>
-                  <button type="button" onClick={() => move(index, -1)} disabled={index === 0} title="تحريك لأعلى">↑</button>
-                  <button type="button" onClick={() => move(index, 1)} disabled={index === pages.length - 1} title="تحريك لأسفل">↓</button>
-                  <button type="button" onClick={() => rotate(p.id, -90)} title="تدوير لليسار">⟲</button>
-                  <button type="button" onClick={() => rotate(p.id, 90)} title="تدوير لليمين">⟳</button>
-                  <button type="button" onClick={() => remove(p.id)} title="حذف الصفحة">✕</button>
+                  <button type="button" onClick={() => move(index, -1)} disabled={index === 0} title={t.up}>↑</button>
+                  <button type="button" onClick={() => move(index, 1)} disabled={index === pages.length - 1} title={t.down}>↓</button>
+                  <button type="button" onClick={() => rotate(p.id, -90)} title={t.rotateLeft}>⟲</button>
+                  <button type="button" onClick={() => rotate(p.id, 90)} title={t.rotateRight}>⟳</button>
+                  <button type="button" onClick={() => remove(p.id)} title={t.delete}>✕</button>
                 </span>
               </div>
             ))}
@@ -126,7 +169,7 @@ export default function OrganizePdf() {
 
       <button className="btn" disabled={pages.length === 0 || loading} onClick={handleApply}>
         {loading && <span className="spinner" />}
-        {loading ? 'جارٍ الحفظ...' : 'حفظ التعديلات وتنزيل'}
+        {loading ? t.loading : t.button}
       </button>
 
       <SeoContent {...seo} />

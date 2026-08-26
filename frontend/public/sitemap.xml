@@ -1,26 +1,313 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://nasserpdf.devs.surf/</loc><priority>1.0</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/word-to-pdf</loc><priority>0.8</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/excel-to-pdf</loc><priority>0.8</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/image-to-pdf</loc><priority>0.8</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/qr-code</loc><priority>0.7</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/pdf-editor</loc><priority>0.8</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/merge-pdf</loc><priority>0.8</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/split-pdf</loc><priority>0.8</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/organize-pdf</loc><priority>0.7</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/watermark-pdf</loc><priority>0.7</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/edit-pdf</loc><priority>0.8</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/pdf-to-image</loc><priority>0.8</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/extract-text</loc><priority>0.7</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/fill-pdf-form</loc><priority>0.7</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/pdf-to-word</loc><priority>0.8</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/pdf-to-excel</loc><priority>0.8</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/compress-pdf</loc><priority>0.7</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/protect-pdf</loc><priority>0.7</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/compare-pdf</loc><priority>0.6</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/ocr</loc><priority>0.7</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/about</loc><priority>0.4</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/privacy</loc><priority>0.3</priority></url>
-  <url><loc>https://nasserpdf.devs.surf/terms</loc><priority>0.3</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://nasserpdf.devs.surf/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/"/>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/"/>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/word-to-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/word-to-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/word-to-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/word-to-pdf"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/word-to-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/word-to-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/word-to-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/word-to-pdf"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/excel-to-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/excel-to-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/excel-to-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/excel-to-pdf"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/excel-to-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/excel-to-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/excel-to-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/excel-to-pdf"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/pdf-to-word</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/pdf-to-word"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/pdf-to-word"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/pdf-to-word"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/pdf-to-word</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/pdf-to-word"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/pdf-to-word"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/pdf-to-word"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/pdf-to-excel</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/pdf-to-excel"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/pdf-to-excel"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/pdf-to-excel"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/pdf-to-excel</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/pdf-to-excel"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/pdf-to-excel"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/pdf-to-excel"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/image-to-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/image-to-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/image-to-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/image-to-pdf"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/image-to-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/image-to-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/image-to-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/image-to-pdf"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/qr-code</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/qr-code"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/qr-code"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/qr-code"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/qr-code</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/qr-code"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/qr-code"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/qr-code"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/pdf-editor</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/pdf-editor"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/pdf-editor"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/pdf-editor"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/pdf-editor</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/pdf-editor"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/pdf-editor"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/pdf-editor"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/merge-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/merge-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/merge-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/merge-pdf"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/merge-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/merge-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/merge-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/merge-pdf"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/split-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/split-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/split-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/split-pdf"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/split-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/split-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/split-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/split-pdf"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/organize-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/organize-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/organize-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/organize-pdf"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/organize-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/organize-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/organize-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/organize-pdf"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/watermark-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/watermark-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/watermark-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/watermark-pdf"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/watermark-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/watermark-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/watermark-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/watermark-pdf"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/edit-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/edit-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/edit-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/edit-pdf"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/edit-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/edit-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/edit-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/edit-pdf"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/pdf-to-image</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/pdf-to-image"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/pdf-to-image"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/pdf-to-image"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/pdf-to-image</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/pdf-to-image"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/pdf-to-image"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/pdf-to-image"/>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/extract-text</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/extract-text"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/extract-text"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/extract-text"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/extract-text</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/extract-text"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/extract-text"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/extract-text"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/fill-pdf-form</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/fill-pdf-form"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/fill-pdf-form"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/fill-pdf-form"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/fill-pdf-form</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/fill-pdf-form"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/fill-pdf-form"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/fill-pdf-form"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/compress-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/compress-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/compress-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/compress-pdf"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/compress-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/compress-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/compress-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/compress-pdf"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/protect-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/protect-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/protect-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/protect-pdf"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/protect-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/protect-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/protect-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/protect-pdf"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/compare-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/compare-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/compare-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/compare-pdf"/>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/compare-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/compare-pdf"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/compare-pdf"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/compare-pdf"/>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/ocr</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/ocr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/ocr"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/ocr"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/ocr</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/ocr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/ocr"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/ocr"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/about</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/about"/>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/about</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://nasserpdf.devs.surf/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nasserpdf.devs.surf/en/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nasserpdf.devs.surf/about"/>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/privacy</loc>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/privacy</loc>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/terms</loc>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://nasserpdf.devs.surf/en/terms</loc>
+    <priority>0.3</priority>
+  </url>
 </urlset>

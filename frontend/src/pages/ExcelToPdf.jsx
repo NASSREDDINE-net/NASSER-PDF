@@ -43,11 +43,14 @@ const seo = {
 export default function ExcelToPdf() {
   return (
     <OfficeToPdf
-      title="تحويل Excel إلى PDF"
-      lead="ارفع ملف XLS أو XLSX وسيتم تحويله إلى PDF. نضبط إعدادات الصفحة تلقائياً (احتواء كامل بصفحة واحدة، اتجاه Landscape) لملفات XLSX حتى لا تتقسم الورقة على صفحات كثيرة."
+      title={{ ar: 'تحويل Excel إلى PDF', en: 'Excel to PDF' }}
+      lead={{
+        ar: 'ارفع ملف XLS أو XLSX وسيتم تحويله إلى PDF. نضبط إعدادات الصفحة تلقائياً (احتواء كامل بصفحة واحدة، اتجاه Landscape) لملفات XLSX حتى لا تتقسم الورقة على صفحات كثيرة.',
+        en: 'Upload an XLS or XLSX file to convert it to PDF. For XLSX files we automatically fit the sheet to one page in landscape orientation, so it doesn’t spread across many pages.'
+      }}
       accept=".xls,.xlsx"
       extensions={['xls', 'xlsx']}
-      hint="XLS أو XLSX — حتى 100MB"
+      hint={{ ar: 'XLS أو XLSX — حتى 100MB', en: 'XLS or XLSX — up to 100MB' }}
       convertFn={convertExcelToPdf}
       seo={seo}
     />

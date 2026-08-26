@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
 import SeoContent from '../components/SeoContent.jsx'
+import { useT } from '../lib/i18n.jsx'
 import { loadPdfForRendering, extractPdfText } from '../lib/pdfRender.js'
 import { downloadBlob } from '../lib/imagePdf.js'
 
@@ -28,7 +29,41 @@ const seo = {
   ]
 }
 
+const TXT = {
+  ar: {
+    title: 'استخراج نص من PDF',
+    lead: 'استخرج كل النص من ملف PDF، وانسخه أو نزّله كملف نصي.',
+    badType: 'صيغة غير مدعومة. يُسمح فقط بملفات PDF.',
+    tooBig: `حجم الملف أكبر من ${MAX_FILE_MB}MB.`,
+    pageHeading: (n) => `--- صفحة ${n} ---`,
+    noText: 'لم يُعثر على نص قابل للاستخراج (قد يكون الملف صوراً ممسوحة ضوئياً).',
+    readFailed: 'تعذّر قراءة الملف. تأكد أنه PDF صالح وغير محمي بكلمة مرور.',
+    copyFailed: 'تعذّر النسخ التلقائي. حدد النص وانسخه يدوياً.',
+    hint: `PDF فقط — حتى ${MAX_FILE_MB}MB`,
+    extracting: 'جارٍ استخراج النص...',
+    download: 'تنزيل كملف .txt',
+    copied: 'تم النسخ ✓',
+    copy: 'نسخ النص'
+  },
+  en: {
+    title: 'Extract Text from PDF',
+    lead: 'Pull all the text out of a PDF file, then copy or download it as a text file.',
+    badType: 'Unsupported format. Only PDF files are allowed.',
+    tooBig: `File is larger than ${MAX_FILE_MB}MB.`,
+    pageHeading: (n) => `--- Page ${n} ---`,
+    noText: 'No extractable text was found (the file may be scanned images).',
+    readFailed: 'Could not read the file. Make sure it’s a valid PDF and not password-protected.',
+    copyFailed: 'Automatic copy failed. Select the text and copy it manually.',
+    hint: `PDF only — up to ${MAX_FILE_MB}MB`,
+    extracting: 'Extracting text...',
+    download: 'Download as .txt',
+    copied: 'Copied ✓',
+    copy: 'Copy text'
+  }
+}
+
 export default function ExtractText() {
+  const t = useT(TXT)
   const [file, setFile] = useState(null)
   const [text, setText] = useState('')
   const [copied, setCopied] = useState(false)
@@ -40,11 +75,11 @@ export default function ExtractText() {
     setError('')
     setText('')
     if (picked.type !== 'application/pdf') {
-      setError('صيغة غير مدعومة. يُسمح فقط بملفات PDF.')
+      setError(t.badType)
       return
     }
     if (picked.size > MAX_FILE_MB * 1024 * 1024) {
-      setError(`حجم الملف أكبر من ${MAX_FILE_MB}MB.`)
+      setError(t.tooBig)
       return
     }
     setFile(picked)
@@ -52,11 +87,11 @@ export default function ExtractText() {
     try {
       const pdfDoc = await loadPdfForRendering(picked)
       const pages = await extractPdfText(pdfDoc)
-      const joined = pages.map((p, i) => `--- صفحة ${i + 1} ---\n${p}`).join('\n\n')
-      setText(joined.trim() || 'لم يُعثر على نص قابل للاستخراج (قد يكون الملف صوراً ممسوحة ضوئياً).')
+      const joined = pages.map((p, i) => `${t.pageHeading(i + 1)}\n${p}`).join('\n\n')
+      setText(joined.trim() || t.noText)
     } catch (err) {
       console.error(err)
-      setError('تعذّر قراءة الملف. تأكد أنه PDF صالح وغير محمي بكلمة مرور.')
+      setError(t.readFailed)
       setFile(null)
     } finally {
       setLoading(false)
@@ -69,7 +104,7 @@ export default function ExtractText() {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
-      setError('تعذّر النسخ التلقائي. حدد النص وانسخه يدوياً.')
+      setError(t.copyFailed)
     }
   }
 
@@ -79,13 +114,13 @@ export default function ExtractText() {
 
   return (
     <div className="tool-page">
-      <h1>استخراج نص من PDF</h1>
-      <p className="lead">استخرج كل النص من ملف PDF، وانسخه أو نزّله كملف نصي.</p>
+      <h1>{t.title}</h1>
+      <p className="lead">{t.lead}</p>
 
       {error && <div className="alert alert-error">{error}</div>}
 
       <div className="card">
-        <FileDrop accept="application/pdf" onFiles={handleFiles} hint={`PDF فقط — حتى ${MAX_FILE_MB}MB`} />
+        <FileDrop accept="application/pdf" onFiles={handleFiles} hint={t.hint} />
         {file && (
           <div className="file-list">
             <div className="file-row">
@@ -96,7 +131,7 @@ export default function ExtractText() {
         )}
       </div>
 
-      {loading && <p className="hint">جارٍ استخراج النص...</p>}
+      {loading && <p className="hint">{t.extracting}</p>}
 
       {text && !loading && (
         <div className="card">
@@ -107,8 +142,8 @@ export default function ExtractText() {
             style={{ width: '100%', fontFamily: 'monospace', fontSize: '0.85rem' }}
           />
           <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
-            <button className="btn" onClick={handleDownload}>تنزيل كملف .txt</button>
-            <button className="btn btn-secondary" onClick={handleCopy}>{copied ? 'تم النسخ ✓' : 'نسخ النص'}</button>
+            <button className="btn" onClick={handleDownload}>{t.download}</button>
+            <button className="btn btn-secondary" onClick={handleCopy}>{copied ? t.copied : t.copy}</button>
           </div>
         </div>
       )}

@@ -26,15 +26,18 @@ const seo = {
 export default function PdfToWord() {
   return (
     <OfficeToPdf
-      title="تحويل PDF إلى Word"
-      lead="ارفع ملف PDF وسيتم تحويله إلى مستند Word (DOCX) قابل للتعديل."
+      title={{ ar: 'تحويل PDF إلى Word', en: 'PDF to Word' }}
+      lead={{
+        ar: 'ارفع ملف PDF وسيتم تحويله إلى مستند Word (DOCX) قابل للتعديل.',
+        en: 'Upload a PDF file and it will be converted to an editable Word (DOCX) document.'
+      }}
       accept=".pdf"
       extensions={['pdf']}
-      hint="PDF فقط — حتى 100MB"
+      hint={{ ar: 'PDF فقط — حتى 100MB', en: 'PDF only — up to 100MB' }}
       convertFn={(file) => convertPdfTo(file, 'docx')}
       outputExtension="docx"
-      buttonLabel="تحويل إلى Word وتنزيل"
-      loadingLabel="جارٍ التحويل..."
+      buttonLabel={{ ar: 'تحويل إلى Word وتنزيل', en: 'Convert to Word and download' }}
+      loadingLabel={{ ar: 'جارٍ التحويل...', en: 'Converting...' }}
       seo={seo}
     />
   )

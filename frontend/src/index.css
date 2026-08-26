@@ -104,6 +104,22 @@ button {
   border-bottom-color: var(--brand);
 }
 
+.lang-toggle {
+  background: var(--brand-light);
+  color: var(--brand);
+  border: 1px solid var(--brand);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.lang-toggle:hover {
+  background: var(--brand);
+  color: #fff;
+}
+
 /* Main */
 .main-content {
   flex: 1;

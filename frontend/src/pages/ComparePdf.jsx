@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
 import SeoContent from '../components/SeoContent.jsx'
+import { useT } from '../lib/i18n.jsx'
 import { loadPdfForRendering, extractPdfText } from '../lib/pdfRender.js'
 
 const MAX_FILE_MB = 75
@@ -27,7 +28,41 @@ const seo = {
   ]
 }
 
+const TXT = {
+  ar: {
+    title: 'مقارنة ملفي PDF',
+    lead: 'ارفع ملفين PDF وشوف الفرق بينهم كلمة بكلمة (مقارنة نصية).',
+    badType: 'صيغة غير مدعومة. يُسمح فقط بملفات PDF.',
+    tooBig: `حجم الملف أكبر من ${MAX_FILE_MB}MB.`,
+    compareFailed: 'تعذّر مقارنة الملفين. تأكد أنهما PDF صالحين وغير محميين بكلمة مرور.',
+    hint: `PDF فقط — حتى ${MAX_FILE_MB}MB`,
+    fileALabel: 'الملف الأول',
+    fileBLabel: 'الملف الثاني',
+    loading: 'جارٍ المقارنة...',
+    button: 'قارن الملفين',
+    pageWord: 'صفحة',
+    added: (n) => `+${n} حرف مُضاف`,
+    removed: (n) => `-${n} حرف محذوف`
+  },
+  en: {
+    title: 'Compare two PDF files',
+    lead: 'Upload two PDF files and see the difference between them word by word.',
+    badType: 'Unsupported format. Only PDF files are allowed.',
+    tooBig: `File is larger than ${MAX_FILE_MB}MB.`,
+    compareFailed: 'Could not compare the files. Make sure both are valid, non-password-protected PDFs.',
+    hint: `PDF only — up to ${MAX_FILE_MB}MB`,
+    fileALabel: 'First file',
+    fileBLabel: 'Second file',
+    loading: 'Comparing...',
+    button: 'Compare files',
+    pageWord: 'pages',
+    added: (n) => `+${n} characters added`,
+    removed: (n) => `-${n} characters removed`
+  }
+}
+
 export default function ComparePdf() {
+  const t = useT(TXT)
   const [fileA, setFileA] = useState(null)
   const [fileB, setFileB] = useState(null)
   const [diffParts, setDiffParts] = useState(null)
@@ -40,11 +75,11 @@ export default function ComparePdf() {
     setError('')
     setDiffParts(null)
     if (picked.type !== 'application/pdf') {
-      setError('صيغة غير مدعومة. يُسمح فقط بملفات PDF.')
+      setError(t.badType)
       return
     }
     if (picked.size > MAX_FILE_MB * 1024 * 1024) {
-      setError(`حجم الملف أكبر من ${MAX_FILE_MB}MB.`)
+      setError(t.tooBig)
       return
     }
     setter(picked)
@@ -70,7 +105,7 @@ export default function ComparePdf() {
       setStats({ added, removed, pagesA: pagesA.length, pagesB: pagesB.length })
     } catch (err) {
       console.error(err)
-      setError('تعذّر مقارنة الملفين. تأكد أنهما PDF صالحين وغير محميين بكلمة مرور.')
+      setError(t.compareFailed)
     } finally {
       setLoading(false)
     }
@@ -78,15 +113,15 @@ export default function ComparePdf() {
 
   return (
     <div className="tool-page" style={{ maxWidth: 800 }}>
-      <h1>مقارنة ملفي PDF</h1>
-      <p className="lead">ارفع ملفين PDF وشوف الفرق بينهم كلمة بكلمة (مقارنة نصية).</p>
+      <h1>{t.title}</h1>
+      <p className="lead">{t.lead}</p>
 
       {error && <div className="alert alert-error">{error}</div>}
 
       <div className="card">
         <div className="field">
-          <label>الملف الأول</label>
-          <FileDrop accept="application/pdf" onFiles={pickFile(setFileA)} hint={`PDF فقط — حتى ${MAX_FILE_MB}MB`} />
+          <label>{t.fileALabel}</label>
+          <FileDrop accept="application/pdf" onFiles={pickFile(setFileA)} hint={t.hint} />
           {fileA && (
             <div className="file-list">
               <div className="file-row">
@@ -98,8 +133,8 @@ export default function ComparePdf() {
         </div>
 
         <div className="field">
-          <label>الملف الثاني</label>
-          <FileDrop accept="application/pdf" onFiles={pickFile(setFileB)} hint={`PDF فقط — حتى ${MAX_FILE_MB}MB`} />
+          <label>{t.fileBLabel}</label>
+          <FileDrop accept="application/pdf" onFiles={pickFile(setFileB)} hint={t.hint} />
           {fileB && (
             <div className="file-list">
               <div className="file-row">
@@ -113,18 +148,18 @@ export default function ComparePdf() {
 
       <button className="btn" disabled={!fileA || !fileB || loading} onClick={handleCompare}>
         {loading && <span className="spinner" />}
-        {loading ? 'جارٍ المقارنة...' : 'قارن الملفين'}
+        {loading ? t.loading : t.button}
       </button>
 
       {stats && (
         <div className="card" style={{ marginTop: 16 }}>
           <p className="hint">
-            {fileA.name}: {stats.pagesA} صفحة — {fileB.name}: {stats.pagesB} صفحة
+            {fileA.name}: {stats.pagesA} {t.pageWord} — {fileB.name}: {stats.pagesB} {t.pageWord}
           </p>
           <p>
-            <span style={{ color: '#166534' }}>+{stats.added} حرف مُضاف</span>
+            <span style={{ color: '#166534' }}>{t.added(stats.added)}</span>
             {' — '}
-            <span style={{ color: '#b91c1c' }}>-{stats.removed} حرف محذوف</span>
+            <span style={{ color: '#b91c1c' }}>{t.removed(stats.removed)}</span>
           </p>
         </div>
       )}

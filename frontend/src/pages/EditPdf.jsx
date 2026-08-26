@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import FileDrop from '../components/FileDrop.jsx'
 import SeoContent from '../components/SeoContent.jsx'
+import { useT } from '../lib/i18n.jsx'
 import { loadPdfForRendering, renderPageToDataUrl } from '../lib/pdfRender.js'
 import { getPdfPageCount } from '../lib/pdfEdit.js'
 import { applyAnnotations } from '../lib/pdfEditApply.js'
@@ -31,17 +32,73 @@ const seo = {
   ]
 }
 
-const TOOLS = [
-  { id: 'select', label: 'تحديد' },
-  { id: 'text', label: 'نص' },
-  { id: 'image', label: 'صورة' },
-  { id: 'rect', label: 'مستطيل' },
-  { id: 'ellipse', label: 'دائرة' },
-  { id: 'draw', label: 'رسم حر' },
-  { id: 'signature', label: 'توقيع' },
-  { id: 'highlight', label: 'تظليل' },
-  { id: 'whiteout', label: 'إخفاء' }
-]
+const TOOLS = {
+  ar: [
+    { id: 'select', label: 'تحديد' },
+    { id: 'text', label: 'نص' },
+    { id: 'image', label: 'صورة' },
+    { id: 'rect', label: 'مستطيل' },
+    { id: 'ellipse', label: 'دائرة' },
+    { id: 'draw', label: 'رسم حر' },
+    { id: 'signature', label: 'توقيع' },
+    { id: 'highlight', label: 'تظليل' },
+    { id: 'whiteout', label: 'إخفاء' }
+  ],
+  en: [
+    { id: 'select', label: 'Select' },
+    { id: 'text', label: 'Text' },
+    { id: 'image', label: 'Image' },
+    { id: 'rect', label: 'Rectangle' },
+    { id: 'ellipse', label: 'Ellipse' },
+    { id: 'draw', label: 'Draw' },
+    { id: 'signature', label: 'Signature' },
+    { id: 'highlight', label: 'Highlight' },
+    { id: 'whiteout', label: 'Whiteout' }
+  ]
+}
+
+const TXT = {
+  ar: {
+    title: 'تحرير PDF',
+    lead: 'أضف نص، صور، أشكال، رسم حر، تظليل، إخفاء، أو توقيع مباشرة فوق صفحات ملف PDF.',
+    badType: 'صيغة غير مدعومة. يُسمح فقط بملفات PDF.',
+    tooBig: `حجم الملف أكبر من ${MAX_FILE_MB}MB.`,
+    readFailed: 'تعذّر قراءة الملف. تأكد أنه PDF صالح وغير محمي بكلمة مرور.',
+    pageFailed: 'تعذّر عرض هذه الصفحة.',
+    saveFailed: 'تعذّر حفظ التعديلات. حاول مجدداً.',
+    hint: `PDF فقط — حتى ${MAX_FILE_MB}MB`,
+    colorLabel: 'اللون',
+    widthLabel: 'السُمك',
+    loadingPage: 'جارٍ تحميل الصفحة...',
+    prev: 'السابق',
+    next: 'التالي',
+    pageOf: (a, b) => `صفحة ${a} من ${b}`,
+    saving: 'جارٍ الحفظ...',
+    save: 'حفظ وتنزيل PDF',
+    tip: 'نصيحة: استخدم أداة "تحديد" لتحريك أو حذف أي عنصر أضفته، وانقر مرتين فوق نص لتعديله.',
+    newText: 'نص جديد'
+  },
+  en: {
+    title: 'Edit PDF',
+    lead: 'Add text, images, shapes, freehand drawing, highlights, whiteout, or a signature directly on the pages of a PDF.',
+    badType: 'Unsupported format. Only PDF files are allowed.',
+    tooBig: `File is larger than ${MAX_FILE_MB}MB.`,
+    readFailed: 'Could not read the file. Make sure it’s a valid PDF and not password-protected.',
+    pageFailed: 'Could not display this page.',
+    saveFailed: 'Could not save the changes. Please try again.',
+    hint: `PDF only — up to ${MAX_FILE_MB}MB`,
+    colorLabel: 'Color',
+    widthLabel: 'Width',
+    loadingPage: 'Loading page...',
+    prev: 'Previous',
+    next: 'Next',
+    pageOf: (a, b) => `Page ${a} of ${b}`,
+    saving: 'Saving...',
+    save: 'Save and download PDF',
+    tip: 'Tip: use the "Select" tool to move or delete anything you added, and double-click text to edit it.',
+    newText: 'New text'
+  }
+}
 
 const DRAG_BOX_TOOLS = new Set(['rect', 'ellipse', 'highlight', 'whiteout'])
 const PATH_TOOLS = new Set(['draw', 'signature'])
@@ -56,6 +113,8 @@ function pathBounds(points) {
 }
 
 export default function EditPdf() {
+  const t = useT(TXT)
+  const tools = useT(TOOLS)
   const [file, setFile] = useState(null)
   const [pageCount, setPageCount] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
@@ -89,11 +148,11 @@ export default function EditPdf() {
     const picked = files[0]
     setError('')
     if (picked.type !== 'application/pdf') {
-      setError('صيغة غير مدعومة. يُسمح فقط بملفات PDF.')
+      setError(t.badType)
       return
     }
     if (picked.size > MAX_FILE_MB * 1024 * 1024) {
-      setError(`حجم الملف أكبر من ${MAX_FILE_MB}MB.`)
+      setError(t.tooBig)
       return
     }
     try {
@@ -109,7 +168,7 @@ export default function EditPdf() {
       await goToPage(1, pdfDoc)
     } catch (err) {
       console.error(err)
-      setError('تعذّر قراءة الملف. تأكد أنه PDF صالح وغير محمي بكلمة مرور.')
+      setError(t.readFailed)
     }
   }
 
@@ -129,7 +188,7 @@ export default function EditPdf() {
       setCurrentRender(rendered)
     } catch (err) {
       console.error(err)
-      setError('تعذّر عرض هذه الصفحة.')
+      setError(t.pageFailed)
     } finally {
       setPageLoading(false)
     }
@@ -292,7 +351,7 @@ export default function EditPdf() {
       downloadBlob(blob, 'nasser-pdf-edited.pdf')
     } catch (err) {
       console.error(err)
-      setError('تعذّر حفظ التعديلات. حاول مجدداً.')
+      setError(t.saveFailed)
     } finally {
       setLoading(false)
     }
@@ -302,38 +361,38 @@ export default function EditPdf() {
 
   return (
     <div className="tool-page" style={{ maxWidth: 900 }}>
-      <h1>تحرير PDF</h1>
-      <p className="lead">أضف نص، صور، أشكال، رسم حر، تظليل، إخفاء، أو توقيع مباشرة فوق صفحات ملف PDF.</p>
+      <h1>{t.title}</h1>
+      <p className="lead">{t.lead}</p>
 
       {error && <div className="alert alert-error">{error}</div>}
 
       {!file && (
         <div className="card">
-          <FileDrop accept="application/pdf" onFiles={handleFiles} hint={`PDF فقط — حتى ${MAX_FILE_MB}MB`} />
+          <FileDrop accept="application/pdf" onFiles={handleFiles} hint={t.hint} />
         </div>
       )}
 
       {file && (
         <>
           <div className="card" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
-            {TOOLS.map((t) => (
+            {tools.map((toolDef) => (
               <button
-                key={t.id}
+                key={toolDef.id}
                 type="button"
-                className={tool === t.id ? 'btn' : 'btn btn-secondary'}
+                className={tool === toolDef.id ? 'btn' : 'btn btn-secondary'}
                 style={{ padding: '8px 14px', fontSize: '0.85rem' }}
                 onClick={() => {
-                  setTool(t.id)
+                  setTool(toolDef.id)
                   setSelectedId(null)
                 }}
               >
-                {t.label}
+                {toolDef.label}
               </button>
             ))}
             <span style={{ display: 'flex', alignItems: 'center', gap: 6, marginInlineStart: 'auto' }}>
-              <label style={{ fontSize: '0.85rem' }}>اللون</label>
+              <label style={{ fontSize: '0.85rem' }}>{t.colorLabel}</label>
               <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
-              <label style={{ fontSize: '0.85rem' }}>السُمك</label>
+              <label style={{ fontSize: '0.85rem' }}>{t.widthLabel}</label>
               <input
                 type="range"
                 min="1"
@@ -367,11 +426,11 @@ export default function EditPdf() {
                 userSelect: 'none'
               }}
             >
-              {pageLoading && <p style={{ padding: 20 }}>جارٍ تحميل الصفحة...</p>}
+              {pageLoading && <p style={{ padding: 20 }}>{t.loadingPage}</p>}
               {currentRender && (
                 <img
                   src={currentRender.dataUrl}
-                  alt={`صفحة ${currentPage}`}
+                  alt={t.pageOf(currentPage, pageCount)}
                   width={currentRender.width}
                   height={currentRender.height}
                   style={{ display: 'block', pointerEvents: 'none' }}
@@ -522,7 +581,7 @@ export default function EditPdf() {
                         pointerEvents: tool === 'select' ? 'auto' : 'none'
                       }}
                     >
-                      {a.text || 'نص جديد'}
+                      {a.text || t.newText}
                     </div>
                   )
                 )}
@@ -575,20 +634,20 @@ export default function EditPdf() {
           <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
               <button className="btn btn-secondary" disabled={currentPage <= 1} onClick={() => goToPage(currentPage - 1)}>
-                السابق
+                {t.prev}
               </button>
-              <span>صفحة {currentPage} من {pageCount}</span>
+              <span>{t.pageOf(currentPage, pageCount)}</span>
               <button className="btn btn-secondary" disabled={currentPage >= pageCount} onClick={() => goToPage(currentPage + 1)}>
-                التالي
+                {t.next}
               </button>
             </div>
             <button className="btn" disabled={loading || totalAnnotationsCount === 0} onClick={handleSave}>
               {loading && <span className="spinner" />}
-              {loading ? 'جارٍ الحفظ...' : 'حفظ وتنزيل PDF'}
+              {loading ? t.saving : t.save}
             </button>
           </div>
           <p className="hint">
-            نصيحة: استخدم أداة "تحديد" لتحريك أو حذف أي عنصر أضفته، وانقر مرتين فوق نص لتعديله.
+            {t.tip}
           </p>
         </>
       )}

@@ -1,9 +1,25 @@
 import { useEffect, useRef, useState } from 'react'
 import { hasValidLocalSession, verifyGoogleIdToken } from '../lib/auth.js'
+import { useLanguage, useT } from '../lib/i18n.jsx'
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
+const TXT = {
+  ar: {
+    loginFailed: 'تعذّر تسجيل الدخول.',
+    prompt: 'سجّل الدخول بحساب Google لاستخدام هذه الأداة — خطوة بسيطة لمنع إساءة الاستخدام، ما نخزّن أي بيانات عنك.',
+    verifying: 'جارٍ التحقق...'
+  },
+  en: {
+    loginFailed: 'Could not sign in.',
+    prompt: 'Sign in with Google to use this tool — a simple step to prevent abuse, we don’t store any data about you.',
+    verifying: 'Verifying...'
+  }
+}
+
 export default function GoogleSignInGate({ children }) {
+  const { lang } = useLanguage()
+  const t = useT(TXT)
   const [signedIn, setSignedIn] = useState(hasValidLocalSession())
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -25,7 +41,7 @@ export default function GoogleSignInGate({ children }) {
             await verifyGoogleIdToken(response.credential)
             setSignedIn(true)
           } catch (err) {
-            setError(err.message || 'تعذّر تسجيل الدخول.')
+            setError(err.message || t.loginFailed)
           } finally {
             setLoading(false)
           }
@@ -34,7 +50,7 @@ export default function GoogleSignInGate({ children }) {
       window.google.accounts.id.renderButton(buttonRef.current, {
         theme: 'outline',
         size: 'large',
-        locale: 'ar'
+        locale: lang
       })
     }
 
@@ -60,10 +76,10 @@ export default function GoogleSignInGate({ children }) {
   return (
     <div className="card" style={{ textAlign: 'center', padding: 40 }}>
       <p style={{ marginBottom: 16 }}>
-        سجّل الدخول بحساب Google لاستخدام هذه الأداة — خطوة بسيطة لمنع إساءة الاستخدام، ما نخزّن أي بيانات عنك.
+        {t.prompt}
       </p>
       {error && <div className="alert alert-error">{error}</div>}
-      {loading && <p className="hint">جارٍ التحقق...</p>}
+      {loading && <p className="hint">{t.verifying}</p>}
       <div ref={buttonRef} style={{ display: 'flex', justifyContent: 'center' }} />
     </div>
   )
